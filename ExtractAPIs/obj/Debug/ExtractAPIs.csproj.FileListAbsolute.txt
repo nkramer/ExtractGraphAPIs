@@ -1,7 +1,0 @@
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\bin\Debug\ExtractAPIs.exe.config
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\bin\Debug\ExtractAPIs.exe
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\bin\Debug\ExtractAPIs.pdb
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\obj\Debug\ExtractAPIs.csprojResolveAssemblyReference.cache
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\obj\Debug\ExtractAPIs.csproj.CoreCompileInputs.cache
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\obj\Debug\ExtractAPIs.exe
-C:\Users\nkramer\source\repos\ExtractAPIs\ExtractAPIs\obj\Debug\ExtractAPIs.pdb
