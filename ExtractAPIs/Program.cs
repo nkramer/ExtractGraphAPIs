@@ -9,7 +9,7 @@ namespace ExtractAPIs
 {
     class Api 
     { 
-       public string method;
+        public string method;
         public string path;
         public string appPermissions;
         public string delegatedPermissions;
@@ -47,8 +47,7 @@ namespace ExtractAPIs
 
         static void Main(string[] args)
         {
-            //Recurse(@"C:\Users\nkramer\source\repos\service-shared_platform_api-spec\resource_model"); 
-            Recurse2(rootpath);
+            RecurseDirectory(rootpath);
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -57,11 +56,11 @@ namespace ExtractAPIs
             int index = api.IndexOf(' ');
             return api.Substring(index + 1, api.Length - index - 1);
         }
-        static void Recurse2(string dir)
+        static void RecurseDirectory(string dir)
         {
             foreach (var path in Directory.EnumerateDirectories(dir))
             {
-                Recurse2(path);
+                RecurseDirectory(path);
             }
 
             List<Api> apis = new List<Api>();
@@ -92,10 +91,20 @@ namespace ExtractAPIs
             }
         }
 
+        private static string GetPermissions(IEnumerable<string> lines, string permissionType)
+        {
+            var permsLines = from line in lines
+                                      where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
+                                      select line.Split('|');
+            string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
+            return perms;
+        }
+
         private static IEnumerable<Api> ReadFile(string path)
         {
             string[] lines = File.ReadAllLines(path);
-            var moreApis = lines.Skip(1)
+
+            var teamsHttpCalls = lines.Skip(1)
                 .Where(line =>
                     line.ToLower().Contains("team")
                     && (line.Trim().StartsWith("GET")
@@ -103,19 +112,13 @@ namespace ExtractAPIs
                     || line.Trim().StartsWith("POST")
                     || line.Trim().StartsWith("PATCH")
                     || line.Trim().StartsWith("DELETE")))
-                .Select(line => line.Replace("https://graph.microsoft.com/beta", "").Replace("https://graph.microsoft.com/v1.0", ""));
+                .Select(line => line.Replace("https://graph.microsoft.com/beta", "").Replace("https://graph.microsoft.com/v1.0", ""))
+                .ToArray();
 
-            var delegatedPermsLines = from line in lines
-                                      where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith("|Delegated(workorschoolaccount)|")
-                                      select line.Split('|');
-            string delegatedPerms = (delegatedPermsLines.Count() == 0) ? "" : delegatedPermsLines.First()[2].Trim().Replace(",", " ");
+            string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
+            string appPerms = GetPermissions(lines, "Application");
 
-            var appPermsLines = from line in lines
-                                where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith("|Application|")
-                                select line.Split('|');
-            string appPerms = (appPermsLines.Count() == 0) ? "" : appPermsLines.First()[2].Trim().Replace(",", " ");
-
-            var newApis = moreApis.Select(line => new Api()
+            var newApis = teamsHttpCalls.Select(line => new Api()
             {
                 method = GetMethod(line),
                 path = GetUrl(line),
@@ -124,34 +127,5 @@ namespace ExtractAPIs
             });
             return newApis;
         }
-
-
-        //        static void Recurse(string dir)
-        //        {
-        //            foreach (var path in Directory.EnumerateDirectories(dir))
-        //            {
-        //                Recurse(path);
-        //            }
-        //            foreach (var path in Directory.EnumerateFiles(dir))
-        //            {
-        //                string shortPath = path.Replace(@"C:\Users\nkramer\source\repos\service-shared_platform_api-spec\resource_model\", "");
-        //                if (Path.GetExtension(path).ToLowerInvariant() == ".md")
-        //                {
-        ////                    Console.WriteLine($"{path}, ");
-        //                    string[] lines = File.ReadAllLines(path);
-        //                    string summary = lines.Skip(1).First(line => line.Trim() != "").Trim();
-        //                    var httpLine = lines
-        //                        .Zip(Enumerable.Range(0, lines.Length), (a, b) => Tuple.Create(a, b))
-        //                        .FirstOrDefault(line => line.Item1.Trim().StartsWith("```")
-        //                            && line.Item1.Trim().EndsWith("http"));
-        //                    if (httpLine != null)
-        //                    {
-        //                        string[] apiParts = lines[httpLine.Item2 + 1].Trim().Split(' ');
-        //                        // Http verb + URL
-        //                        Console.WriteLine($"{shortPath}, {summary}, {apiParts[0]}, {apiParts[1]}");
-        //                    }
-        //                }
-        //            }
-        //        }
     }
 }
