@@ -100,11 +100,23 @@ namespace ExtractAPIs
             return perms;
         }
 
+        private static IEnumerable<T> LinesBefore<T>(IEnumerable<T> list, Func<T, bool> test)
+        {
+            foreach (var item in list)
+            {
+                if (test(item))
+                    break;
+                else
+                    yield return item;
+            }
+        }
+
         private static IEnumerable<Api> ReadFile(string path)
         {
             string[] lines = File.ReadAllLines(path);
+            lines = LinesBefore(lines, line => line.StartsWith("##") && line.EndsWith("Example")).ToArray();
 
-            var teamsHttpCalls = lines.Skip(1)
+            var teamsHttpCalls = lines.Skip(1)              
                 .Where(line =>
                     line.ToLower().Contains("team")
                     && (line.Trim().StartsWith("GET")
