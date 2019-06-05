@@ -35,6 +35,7 @@ namespace ExtractAPIs
         }
     }
 
+    // Equality comparison by method and URL
     class ApiComparer : IEqualityComparer<Api>
     {
         public bool Equals(Api x, Api y) => x.method == y.method && x.path == y.path;
@@ -44,6 +45,7 @@ namespace ExtractAPIs
     class Program
     {
         static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference\beta";
+        static string[] requiredWords = new string[] { "team", "chat" };
 
         static void Main(string[] args)
         {
@@ -111,6 +113,9 @@ namespace ExtractAPIs
             }
         }
 
+        private static bool ContainsAnyWord(string line, IEnumerable<string> words)
+            => words.Any(word => line.ToLower().Contains(word));
+
         private static IEnumerable<Api> ReadFile(string path)
         {
             string[] lines = File.ReadAllLines(path);
@@ -118,8 +123,9 @@ namespace ExtractAPIs
 
             var teamsHttpCalls = lines.Skip(1)              
                 .Where(line =>
-                    line.ToLower().Contains("team")
-                    && (line.Trim().StartsWith("GET")
+                    ContainsAnyWord(line, requiredWords)
+                    &&
+                    (line.Trim().StartsWith("GET")
                     || line.Trim().StartsWith("PUT")
                     || line.Trim().StartsWith("POST")
                     || line.Trim().StartsWith("PATCH")
