@@ -42,15 +42,22 @@ namespace ExtractAPIs
         public int GetHashCode(Api obj) => (obj.method + obj.path).GetHashCode();
     }
 
+    enum OutputFormat
+    {
+        ApiPaths,
+        ApiPathsAndPermissions,
+        Resources,
+    }
+
     class Program
     {
-        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference\beta";
+        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference\beta\api";
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings" };
-        static bool includePermissions = true;
+        static OutputFormat outputFormat = OutputFormat.Resources;
 
         static void Main(string[] args)
         {
-            RecurseDirectory(rootpath);
+            ProcessApiDocs(rootpath);
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -59,13 +66,46 @@ namespace ExtractAPIs
             int index = api.IndexOf(' ');
             return api.Substring(index + 1, api.Length - index - 1);
         }
-        static void RecurseDirectory(string dir)
-        {
-            foreach (var path in Directory.EnumerateDirectories(dir))
-            {
-                RecurseDirectory(path);
-            }
 
+        static bool EndsWithId(string path) => path.EndsWith("}");
+
+        static string BasePath(string path)
+        {
+            //if (!EndsWithId(path))
+            //    throw new Exception("no {id}");
+            var stop = path.LastIndexOf("/");
+            string result = path.Substring(0, stop);
+            return result;
+        }
+
+        static string StripIds(string path) => EndsWithId(path) ? BasePath(path) : path;
+
+        static bool IsAction(Api api, ILookup<string, Api> pathLookup)
+            => api.method == "POST" 
+            && !pathLookup[api.path].Any(a => a.method != "POST")
+            && api.path != "/teams" && api.path != "/app/calls"; // hack
+
+        static string Verb(Api api, ILookup<string, Api> pathLookup)
+        {
+            if (IsAction(api, pathLookup))
+                return Path.GetFileName(api.path);
+            switch (api.method)
+            {
+                case "GET":
+                    if (EndsWithId(api.path))
+                        return "read";
+                    else
+                        return "list";
+                case "PUT": return "create";
+                case "POST": return "create";
+                case "PATCH": return "update";
+                case "DELETE": return "delete";
+                default: return "???";
+            }
+        }
+
+        static void ProcessApiDocs(string dir)
+        {
             List<Api> apis = new List<Api>();
 
             foreach (var path in Directory.EnumerateFiles(dir))
@@ -73,11 +113,7 @@ namespace ExtractAPIs
                 string shortPath = path.Replace(rootpath + "\\", "");
                 if (Path.GetExtension(path).ToLowerInvariant() == ".md")
                 {
-                    //                    Console.WriteLine($"{path}, ");
                     IEnumerable<Api> newApis = ReadFile(path);
-
-                    //Console.WriteLine(appPerms);
-
                     apis.AddRange(newApis);
                 }
             }
@@ -86,15 +122,69 @@ namespace ExtractAPIs
             apis = apis.Distinct(new ApiComparer()).OrderBy(api => api.SortHandle).ToList();
             //apis = apis.Where(api => !api.path.Contains("/reports")).ToList();
 
-            foreach (var a in apis)
+            if (outputFormat == OutputFormat.ApiPaths || outputFormat == OutputFormat.ApiPathsAndPermissions)
             {
-                Console.Write($"{a.method.PadRight("DELETE".Length, ' ')} {a.path}");
+                foreach (var a in apis)
+                {
+                    int maxMethodName = "DELETE".Length;
+                    var paddedMethod = a.method.PadRight(maxMethodName, ' ');
+                    Console.Write($"{paddedMethod}, {a.path}");
 
-                if (includePermissions)
-                    Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
+                    if (outputFormat == OutputFormat.ApiPathsAndPermissions)
+                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
 
-                Console.WriteLine();
+                    Console.WriteLine();
+                }
             }
+            else if (outputFormat == OutputFormat.Resources)
+            {
+                var pathLookup = apis.ToLookup(api => api.path);
+                var used = new Dictionary<Api, Api>();
+
+                var resources = pathLookup.OrderBy(group => group.Key).ToArray();
+                var regrouped = new Dictionary<string, List<Api>>();
+
+                var group3 =
+                apis.GroupBy(api =>
+                {
+                    if (IsAction(api, pathLookup))
+                        return StripIds(BasePath(api.path));
+                    else
+                        return StripIds(api.path);
+                });
+
+                foreach (var resource in group3)
+                {
+                    Console.WriteLine($"{resource.Key}, {String.Join(" ", resource.Select(api => Verb(api, pathLookup)).ToArray())}");
+                }
+            }
+
+            //foreach (var resource in resources)
+            //{
+            //    if (IsAction(res))
+            //    //if (!IsAction(res)
+            //    Console.WriteLine($"{resource.Key}");
+            //}
+
+
+                //// print actions only
+                //foreach (var a in apis.Where(api => api.method == "POST" && !pathLookup[api.path].Any(a => a.method != "POST")))
+                //{
+                //    int maxMethodName = "DELETE".Length;
+                //    var paddedMethod = a.method.PadRight(maxMethodName, ' ');
+                //    Console.Write($"{paddedMethod}, {a.path}");
+
+                //    if (includePermissions)
+                //        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
+
+                //    Console.WriteLine();
+                //}
+
+
+                //foreach (var resource in apis.GroupBy(api => api.path))
+                //{
+                //    Console.Write(resource.Key);
+                //}
         }
 
         private static string GetPermissions(IEnumerable<string> lines, string permissionType)
