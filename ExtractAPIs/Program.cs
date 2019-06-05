@@ -45,7 +45,8 @@ namespace ExtractAPIs
     class Program
     {
         static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference\beta";
-        static string[] requiredWords = new string[] { "team", "chat" };
+        static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings" };
+        static bool includePermissions = true;
 
         static void Main(string[] args)
         {
@@ -87,9 +88,12 @@ namespace ExtractAPIs
 
             foreach (var a in apis)
             {
-                //Console.WriteLine($"{a.method.PadRight("DELETE".Length, ' ')} {a.path}, {a.delegatedPermissions}, {a.appPermissions}");
-                Console.WriteLine($"{a.method.PadRight("DELETE".Length, ' ')} {a.path}");
-                //Console.WriteLine(a);
+                Console.Write($"{a.method.PadRight("DELETE".Length, ' ')} {a.path}");
+
+                if (includePermissions)
+                    Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
+
+                Console.WriteLine();
             }
         }
 
@@ -99,6 +103,8 @@ namespace ExtractAPIs
                                       where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
                                       select line.Split('|');
             string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
+            if (perms.EndsWith("."))
+                perms = perms.Substring(0, perms.Length - 1);
             return perms;
         }
 
@@ -119,7 +125,9 @@ namespace ExtractAPIs
         private static IEnumerable<Api> ReadFile(string path)
         {
             string[] lines = File.ReadAllLines(path);
-            lines = LinesBefore(lines, line => line.StartsWith("##") && line.EndsWith("Example")).ToArray();
+            lines = LinesBefore(lines, line => line.StartsWith("##") && 
+                    (line.EndsWith("Example") || line.EndsWith("Examples")))
+                .ToArray();
 
             var teamsHttpCalls = lines.Skip(1)              
                 .Where(line =>
