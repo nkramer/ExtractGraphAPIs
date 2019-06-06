@@ -71,8 +71,6 @@ namespace ExtractAPIs
 
         static string BasePath(string path)
         {
-            //if (!EndsWithId(path))
-            //    throw new Exception("no {id}");
             var stop = path.LastIndexOf("/");
             string result = path.Substring(0, stop);
             return result;
@@ -118,7 +116,6 @@ namespace ExtractAPIs
                 }
             }
 
-            //apis = apis.Distinct().OrderBy(api => GetUrl(api) + GetMethod(api)).ToList();
             apis = apis.Distinct(new ApiComparer()).OrderBy(api => api.SortHandle).ToList();
             //apis = apis.Where(api => !api.path.Contains("/reports")).ToList();
 
@@ -139,52 +136,21 @@ namespace ExtractAPIs
             else if (outputFormat == OutputFormat.Resources)
             {
                 var pathLookup = apis.ToLookup(api => api.path);
-                var used = new Dictionary<Api, Api>();
-
-                var resources = pathLookup.OrderBy(group => group.Key).ToArray();
-                var regrouped = new Dictionary<string, List<Api>>();
-
-                var group3 =
-                apis.GroupBy(api =>
-                {
+                var groupedApis =
+                apis.GroupBy(api => {
                     if (IsAction(api, pathLookup))
                         return StripIds(BasePath(api.path));
                     else
                         return StripIds(api.path);
                 });
 
-                foreach (var resource in group3)
+                foreach (var resource in groupedApis)
                 {
-                    Console.WriteLine($"{resource.Key}, {String.Join(" ", resource.Select(api => Verb(api, pathLookup)).ToArray())}");
+                    string delegated = String.Join(" ", resource.Where(api => api.delegatedPermissions.ToLower() != "not supported").Select(api => Verb(api, pathLookup)).ToArray());
+                    string appCtx = String.Join(" ", resource.Where(api => api.appPermissions.ToLower() != "not supported").Select(api => Verb(api, pathLookup)).ToArray());
+                    Console.WriteLine($"{resource.Key}, {delegated}, {appCtx}");
                 }
             }
-
-            //foreach (var resource in resources)
-            //{
-            //    if (IsAction(res))
-            //    //if (!IsAction(res)
-            //    Console.WriteLine($"{resource.Key}");
-            //}
-
-
-                //// print actions only
-                //foreach (var a in apis.Where(api => api.method == "POST" && !pathLookup[api.path].Any(a => a.method != "POST")))
-                //{
-                //    int maxMethodName = "DELETE".Length;
-                //    var paddedMethod = a.method.PadRight(maxMethodName, ' ');
-                //    Console.Write($"{paddedMethod}, {a.path}");
-
-                //    if (includePermissions)
-                //        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
-
-                //    Console.WriteLine();
-                //}
-
-
-                //foreach (var resource in apis.GroupBy(api => api.path))
-                //{
-                //    Console.Write(resource.Key);
-                //}
         }
 
         private static string GetPermissions(IEnumerable<string> lines, string permissionType)
