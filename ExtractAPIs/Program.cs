@@ -92,11 +92,15 @@ namespace ExtractAPIs
             switch (api.method)
             {
                 case "GET":
-                    if (EndsWithId(api.path))
+                    if (EndsWithId(api.path) || Path.GetFileName(api.path).StartsWith("get"))
                         return "read";
                     else
                         return "list";
-                case "PUT": return "create";
+                case "PUT":
+                    if (api.path.Contains("/schedule/"))
+                        return "update";
+                    else
+                        return "create";
                 case "POST": return "create";
                 case "PATCH": return "update";
                 case "DELETE": return "delete";
