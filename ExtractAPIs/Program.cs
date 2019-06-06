@@ -62,9 +62,11 @@ namespace ExtractAPIs
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
         static string GetUrl(string api) {
-            string s = GetMethod(api);
             int index = api.IndexOf(' ');
-            return api.Substring(index + 1, api.Length - index - 1);
+            string url = api.Substring(index + 1, api.Length - index - 1);
+            if (url.Contains("("))
+                url = url.Substring(0, url.LastIndexOf("("));
+            return url;
         }
 
         static bool EndsWithId(string path) => path.EndsWith("}");
