@@ -13,6 +13,7 @@ namespace ExtractAPIs
         public string path;
         public string appPermissions;
         public string delegatedPermissions;
+        public string endpoint;
 
         public string SortHandle
         {
@@ -51,13 +52,16 @@ namespace ExtractAPIs
 
     class Program
     {
-        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference\beta\api";
-        static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings" };
-        static OutputFormat outputFormat = OutputFormat.Resources;
+        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
+        static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
+        //static OutputFormat outputFormat = OutputFormat.Resources;
+        static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
 
         static void Main(string[] args)
         {
-            ProcessApiDocs(rootpath);
+            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            Api[] beta = ReadApis(rootpath + @"\beta\api");
+            OutputApis(beta);
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -66,6 +70,7 @@ namespace ExtractAPIs
             string url = api.Substring(index + 1, api.Length - index - 1);
             if (url.Contains("("))
                 url = url.Substring(0, url.LastIndexOf("("));
+            url = url.Replace("{teamId}", "{id}");
             return url;
         }
 
@@ -108,23 +113,8 @@ namespace ExtractAPIs
             }
         }
 
-        static void ProcessApiDocs(string dir)
+        static void OutputApis(Api[] apis)
         {
-            List<Api> apis = new List<Api>();
-
-            foreach (var path in Directory.EnumerateFiles(dir))
-            {
-                string shortPath = path.Replace(rootpath + "\\", "");
-                if (Path.GetExtension(path).ToLowerInvariant() == ".md")
-                {
-                    IEnumerable<Api> newApis = ReadFile(path);
-                    apis.AddRange(newApis);
-                }
-            }
-
-            apis = apis.Distinct(new ApiComparer()).OrderBy(api => api.SortHandle).ToList();
-            //apis = apis.Where(api => !api.path.Contains("/reports")).ToList();
-
             if (outputFormat == OutputFormat.ApiPaths || outputFormat == OutputFormat.ApiPathsAndPermissions)
             {
                 foreach (var a in apis)
@@ -143,7 +133,8 @@ namespace ExtractAPIs
             {
                 var pathLookup = apis.ToLookup(api => api.path);
                 var groupedApis =
-                apis.GroupBy(api => {
+                apis.GroupBy(api =>
+                {
                     if (IsAction(api, pathLookup))
                         return StripIds(BasePath(api.path));
                     else
@@ -157,6 +148,24 @@ namespace ExtractAPIs
                     Console.WriteLine($"{resource.Key}, {delegated}, {appCtx}");
                 }
             }
+        }
+
+        private static Api[] ReadApis(string dir)
+        {
+            List<Api> apis = new List<Api>();
+
+            foreach (var path in Directory.EnumerateFiles(dir))
+            {
+                string shortPath = path.Replace(rootpath + "\\", "");
+                if (Path.GetExtension(path).ToLowerInvariant() == ".md")
+                {
+                    IEnumerable<Api> newApis = ReadFile(path);
+                    apis.AddRange(newApis);
+                }
+            }
+
+            Api[] result = apis.Distinct(new ApiComparer()).OrderBy(api => api.SortHandle).ToArray();
+            return result;
         }
 
         private static string GetPermissions(IEnumerable<string> lines, string permissionType)
@@ -186,6 +195,8 @@ namespace ExtractAPIs
 
         private static IEnumerable<Api> ReadFile(string path)
         {
+            string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
+
             string[] lines = File.ReadAllLines(path);
             lines = LinesBefore(lines, line => line.StartsWith("##") && 
                     (line.EndsWith("Example") || line.EndsWith("Examples")))
@@ -210,6 +221,7 @@ namespace ExtractAPIs
             {
                 method = GetMethod(line),
                 path = GetUrl(line),
+                endpoint = endpoint,
                 delegatedPermissions = delegatedPerms,
                 appPermissions = appPerms
             });
