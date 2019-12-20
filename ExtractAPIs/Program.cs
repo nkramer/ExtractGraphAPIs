@@ -14,6 +14,7 @@ namespace ExtractAPIs
         public string appPermissions;
         public string delegatedPermissions;
         public string endpoint;
+        public string owner;
 
         public string SortHandle
         {
@@ -50,10 +51,29 @@ namespace ExtractAPIs
         Resources,
     }
 
+    class Ownership
+    {
+        public string Name;
+        public string[] KeywordsInPath;
+    }
+
     class Program
     {
         static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
+        static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
+        static string[] requiredWordsForShifts = new string[] { "schedule", "workforceIntegrations" };
+
+        // A list of (string, string list) pairs. First string is the owner, 
+        // second string is the keywords the path needs to contain to belong to that owner. Order matters.
+        static Ownership[] ownershipMap = new Ownership[]
+            {
+                new Ownership() { Name = "IC3", KeywordsInPath = new string[] { "calls", "onlineMeetings", "presence" } },
+                new Ownership() { Name = "Reports", KeywordsInPath = new string[] { "reports" } },
+                new Ownership() { Name = "Shifts", KeywordsInPath = new string[] { "schedule", "workforceIntegrations" } },
+                new Ownership() { Name = "GraphFw", KeywordsInPath = new string[] { "/" } },
+            };
+
         //static OutputFormat outputFormat = OutputFormat.Resources;
         static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
 
@@ -124,7 +144,7 @@ namespace ExtractAPIs
                     Console.Write($"{paddedMethod}, {a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}");
+                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}");
 
                     Console.WriteLine();
                 }
@@ -190,6 +210,16 @@ namespace ExtractAPIs
             }
         }
 
+        private static string GetOwner(string path)
+        {
+            foreach (var owner in ownershipMap)
+            {
+                if (ContainsAnyWord(path, owner.KeywordsInPath))
+                    return owner.Name;
+            }
+            return "GraphFW";
+        }
+
         private static bool ContainsAnyWord(string line, IEnumerable<string> words)
             => words.Any(word => line.ToLower().Contains(word));
 
@@ -223,7 +253,8 @@ namespace ExtractAPIs
                 path = GetUrl(line),
                 endpoint = endpoint,
                 delegatedPermissions = delegatedPerms,
-                appPermissions = appPerms
+                appPermissions = appPerms,
+                owner = GetOwner(line),
             });
             return newApis;
         }
