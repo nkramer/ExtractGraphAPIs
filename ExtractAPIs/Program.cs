@@ -15,7 +15,7 @@ namespace ExtractAPIs
         public string delegatedPermissions;
         public string endpoint;
         public string owner;
-//        public bool inV1 = false;
+        public bool hasGranularPermissions;
 
         public string ShortName
         {
@@ -86,9 +86,7 @@ namespace ExtractAPIs
         static void Main(string[] args)
         {
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            //OutputApis(v1);
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            //OutputApis(beta);
             OutputApis(beta, v1);
         }
 
@@ -155,7 +153,7 @@ namespace ExtractAPIs
                     Console.Write($"{paddedMethod}, {a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}, {v1Api != null}");
+                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}, {v1Api != null}, {a.hasGranularPermissions}");
 
                     Console.WriteLine();
                 }
@@ -258,6 +256,10 @@ namespace ExtractAPIs
             string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
             string appPerms = GetPermissions(lines, "Application");
 
+            bool hasGranularPermissions 
+                = delegatedPerms.Split(' ').Where(perm => perm != "" && perm != "Group.Read.All" && perm != "Group.ReadWrite.All").Count() > 0
+                && appPerms.Split(' ').Where(perm => perm != "" && perm != "Group.Read.All" && perm != "Group.ReadWrite.All").Count() > 0;
+
             var newApis = teamsHttpCalls.Select(line => new Api()
             {
                 method = GetMethod(line),
@@ -266,6 +268,7 @@ namespace ExtractAPIs
                 delegatedPermissions = delegatedPerms,
                 appPermissions = appPerms,
                 owner = GetOwner(line),
+                hasGranularPermissions = hasGranularPermissions,
             });
             return newApis;
         }
