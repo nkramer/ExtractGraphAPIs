@@ -15,6 +15,12 @@ namespace ExtractAPIs
         public string delegatedPermissions;
         public string endpoint;
         public string owner;
+//        public bool inV1 = false;
+
+        public string ShortName
+        {
+            get => $"{method} {path}";
+        }
 
         public string SortHandle
         {
@@ -79,9 +85,11 @@ namespace ExtractAPIs
 
         static void Main(string[] args)
         {
-            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            //OutputApis(v1);
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            OutputApis(beta);
+            //OutputApis(beta);
+            OutputApis(beta, v1);
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -133,18 +141,21 @@ namespace ExtractAPIs
             }
         }
 
-        static void OutputApis(Api[] apis)
+        static void OutputApis(Api[] apis, Api[] v1Apis)
         {
+            var v1Lookup = v1Apis.ToLookup(api => api.ShortName);
+
             if (outputFormat == OutputFormat.ApiPaths || outputFormat == OutputFormat.ApiPathsAndPermissions)
             {
                 foreach (var a in apis)
                 {
+                    var v1Api = v1Lookup[a.ShortName].FirstOrDefault();
                     int maxMethodName = "DELETE".Length;
                     var paddedMethod = a.method.PadRight(maxMethodName, ' ');
                     Console.Write($"{paddedMethod}, {a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}");
+                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}, {v1Api != null}");
 
                     Console.WriteLine();
                 }
