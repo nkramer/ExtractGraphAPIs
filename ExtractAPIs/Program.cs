@@ -16,6 +16,7 @@ namespace ExtractAPIs
         public string endpoint;
         public string owner;
         public bool hasGranularPermissions;
+        public bool inV1 = false; // only filled in very late in the program
 
         public string ShortName
         {
@@ -65,7 +66,8 @@ namespace ExtractAPIs
 
     class Program
     {
-        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
+        //static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
+        static string rootpath = @"C:\Users\Nick\sources\microsoft-graph-docs\api-reference";
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForShifts = new string[] { "schedule", "workforceIntegrations" };
@@ -88,6 +90,16 @@ namespace ExtractAPIs
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
             OutputApis(beta, v1);
+
+            Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
+            Console.Write((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
+            Console.WriteLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
+
+            Console.Write((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            Console.WriteLine(" of Teams Graph APIs are in v1.0 not just beta");
+
+            Console.Write((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            Console.WriteLine(" of Teams Graph APIs have granular permissions in v1.0");
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -112,7 +124,7 @@ namespace ExtractAPIs
         static string StripIds(string path) => EndsWithId(path) ? BasePath(path) : path;
 
         static bool IsAction(Api api, ILookup<string, Api> pathLookup)
-            => api.method == "POST" 
+            => api.method == "POST"
             && !pathLookup[api.path].Any(a => a.method != "POST")
             && api.path != "/teams" && api.path != "/app/calls"; // hack
 
@@ -148,12 +160,13 @@ namespace ExtractAPIs
                 foreach (var a in apis)
                 {
                     var v1Api = v1Lookup[a.ShortName].FirstOrDefault();
+                    a.inV1 = v1Api != null; // HACK doing this here
                     int maxMethodName = "DELETE".Length;
                     var paddedMethod = a.method.PadRight(maxMethodName, ' ');
-                    Console.Write($"{paddedMethod}, {a.path}");
+                    Console.Write($"{paddedMethod},{a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        Console.Write($", {a.delegatedPermissions}, {a.appPermissions}, {a.owner}, {v1Api != null}, {a.hasGranularPermissions}");
+                        Console.Write($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions}");
 
                     Console.WriteLine();
                 }
@@ -200,8 +213,8 @@ namespace ExtractAPIs
         private static string GetPermissions(IEnumerable<string> lines, string permissionType)
         {
             var permsLines = from line in lines
-                                      where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
-                                      select line.Split('|');
+                             where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
+                             select line.Split('|');
             string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
             if (perms.EndsWith("."))
                 perms = perms.Substring(0, perms.Length - 1);
@@ -237,11 +250,11 @@ namespace ExtractAPIs
             string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
 
             string[] lines = File.ReadAllLines(path);
-            lines = LinesBefore(lines, line => line.StartsWith("##") && 
+            lines = LinesBefore(lines, line => line.StartsWith("##") &&
                     (line.EndsWith("Example") || line.EndsWith("Examples")))
                 .ToArray();
 
-            var teamsHttpCalls = lines.Skip(1)              
+            var teamsHttpCalls = lines.Skip(1)
                 .Where(line =>
                     ContainsAnyWord(line, requiredWords)
                     &&
@@ -256,9 +269,9 @@ namespace ExtractAPIs
             string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
             string appPerms = GetPermissions(lines, "Application");
 
-            bool hasGranularPermissions 
-                = delegatedPerms.Split(' ').Where(perm => perm != "" && perm != "Group.Read.All" && perm != "Group.ReadWrite.All").Count() > 0
-                && appPerms.Split(' ').Where(perm => perm != "" && perm != "Group.Read.All" && perm != "Group.ReadWrite.All").Count() > 0;
+            bool hasGranularPermissions
+                = delegatedPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0
+                && appPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0;
 
             var newApis = teamsHttpCalls.Select(line => new Api()
             {
@@ -272,5 +285,10 @@ namespace ExtractAPIs
             });
             return newApis;
         }
+
+        private static bool IsGranularPermission(string perm)
+            //            => !ContainsAnyWord(perm, new string[] { "", "Group.Read.All", "Group.ReadWrite.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All" });
+            => !new string[] { "", "Group.Read.All", "Group.ReadWrite.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All" }
+            .Contains(perm);
     }
 }
