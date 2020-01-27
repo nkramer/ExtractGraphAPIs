@@ -82,8 +82,8 @@ namespace ExtractAPIs
                 new Ownership() { Name = "GraphFw", KeywordsInPath = new string[] { "/" } },
             };
 
-        static OutputFormat outputFormat = OutputFormat.Resources;
-        //static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
+        //static OutputFormat outputFormat = OutputFormat.Resources;
+        static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
 
         static StreamWriter writer;
 
