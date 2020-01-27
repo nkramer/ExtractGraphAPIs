@@ -66,8 +66,8 @@ namespace ExtractAPIs
 
     class Program
     {
-        //static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
-        static string rootpath = @"C:\Users\Nick\sources\microsoft-graph-docs\api-reference";
+        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
+        //static string rootpath = @"C:\Users\Nick\sources\microsoft-graph-docs\api-reference";
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForShifts = new string[] { "schedule", "workforceIntegrations" };
@@ -82,24 +82,44 @@ namespace ExtractAPIs
                 new Ownership() { Name = "GraphFw", KeywordsInPath = new string[] { "/" } },
             };
 
-        //static OutputFormat outputFormat = OutputFormat.Resources;
-        static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
+        static OutputFormat outputFormat = OutputFormat.Resources;
+        //static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
+
+        static StreamWriter writer;
+
+            static void WriteOutput(string s)
+        {
+            Console.Write(s);
+            writer.Write(s);
+        }
+
+        static void WriteOutputLine(string s)
+        {
+            Console.WriteLine(s);
+            writer.WriteLine(s);
+        }
 
         static void Main(string[] args)
         {
+            Stream output = File.OpenWrite(@"C:\Users\nkramer\source\repos\ExtractAPIs\apis.csv");
+            writer = new StreamWriter(output);
+
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
             OutputApis(beta, v1);
 
             Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
-            Console.Write((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
-            Console.WriteLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
+            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
 
-            Console.Write((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            Console.WriteLine(" of Teams Graph APIs are in v1.0 not just beta");
+            WriteOutput((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs are in v1.0 not just beta");
 
-            Console.Write((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            Console.WriteLine(" of Teams Graph APIs have granular permissions in v1.0");
+            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
+
+            writer.Close();
+            output.Close();
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -163,12 +183,12 @@ namespace ExtractAPIs
                     a.inV1 = v1Api != null; // HACK doing this here
                     int maxMethodName = "DELETE".Length;
                     var paddedMethod = a.method.PadRight(maxMethodName, ' ');
-                    Console.Write($"{paddedMethod},{a.path}");
+                    WriteOutput($"{paddedMethod},{a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        Console.Write($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions}");
+                        WriteOutput($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions}");
 
-                    Console.WriteLine();
+                    WriteOutputLine("");
                 }
             }
             else if (outputFormat == OutputFormat.Resources)
@@ -181,13 +201,14 @@ namespace ExtractAPIs
                         return StripIds(BasePath(api.path));
                     else
                         return StripIds(api.path);
-                });
+                }).OrderBy(resource => resource.First().owner);
+
 
                 foreach (var resource in groupedApis)
                 {
                     string delegated = String.Join(" ", resource.Where(api => api.delegatedPermissions.ToLower() != "not supported").Select(api => Verb(api, pathLookup)).ToArray());
                     string appCtx = String.Join(" ", resource.Where(api => api.appPermissions.ToLower() != "not supported").Select(api => Verb(api, pathLookup)).ToArray());
-                    Console.WriteLine($"{resource.Key}, {delegated}, {appCtx}");
+                    WriteOutputLine($"{resource.Key},{delegated},{appCtx},{resource.First().owner}");
                 }
             }
         }

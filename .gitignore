@@ -16,3 +16,8 @@ ExtractAPIs/obj/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D
 .vs/ExtractAPIs/v15/.suo
 .vs/ExtractAPIs/v15/.suo
 .vs/ExtractAPIs/v15/sqlite3/storage.ide
+/.vs/ExtractAPIs/v15/Server/sqlite3/storage.ide-wal
+/.vs/ExtractAPIs/v15/Server/sqlite3/storage.ide-shm
+/.vs/ExtractAPIs/v15/Server/sqlite3/storage.ide
+/.vs/ExtractAPIs/v15/Server/sqlite3/db.lock
+/ExtractAPIs/obj/Debug/ExtractAPIs.csprojAssemblyReference.cache

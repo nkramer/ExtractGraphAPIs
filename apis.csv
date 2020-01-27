@@ -1,0 +1,60 @@
+/appCatalogs/teamsApps,list create create delete,,GraphFw
+/beta/teams/{id}/photo,list create read,list create read,GraphFw
+/beta/teams/{id}/photo/$value,list,list,GraphFw
+/beta/teams/{id}/photo/{size}/$value,list,list,GraphFw
+/chats,list read,read,GraphFw
+/chats/{id}/members,list read,list read,GraphFw
+/chats/{id}/messages,list create read,list read,GraphFw
+/chats/{id}/messages/{id}/hostedContents,list read,list read,GraphFw
+/chats/{id}/messages/{id}/replies,list create,list,GraphFw
+/groups/{id}/team,create,create,GraphFw
+/me/chats,list read,read,GraphFw
+/me/chats/{id}/messages,list read,list read,GraphFw
+/me/joinedTeams,list,list,GraphFw
+/teams,create read update archive clone offerShiftRequests unarchive,create read update archive clone offerShiftRequests unarchive,GraphFw
+/teams/{id}/channels,list create read update delete members,list create read update delete members,GraphFw
+/teams/{id}/channels/{channelId}/filesFolder,list,list,GraphFw
+/teams/{id}/channels/{id}/members,read update delete,read update delete,GraphFw
+/teams/{id}/channels/{id}/messages,list create read,list read,GraphFw
+/teams/{id}/channels/{id}/messages/{id}/hostedContents,list read,list read,GraphFw
+/teams/{id}/channels/{id}/messages/{id}/replies,list create read,list read,GraphFw
+/teams/{id}/channels/{id}/messages/delta,list,list,GraphFw
+/teams/{id}/channels/{id}/tabs,list create read update delete,list create read update delete,GraphFw
+/teams/{id}/installedApps,list create delete upgrade,list create delete upgrade,GraphFw
+/teamwork/workforceIntegrations,list create update delete,,GraphFw
+/users/{id}/chats,list read,read,GraphFw
+/users/{id}/chats/{id}/members,list read,list read,GraphFw
+/users/{id}/chats/{id}/messages,list create read,list read,GraphFw
+/users/{id}/chats/{id}/messages/{id}/hostedContents,list read,list read,GraphFw
+/users/{id}/joinedTeams,list,list,GraphFw
+/users/{id}/teamwork/installedApps,list create delete upgrade,list create delete upgrade,GraphFw
+/app/calls,,create read delete answer cancelMediaProcessing changeScreenSharingRole mute playPrompt recordResponse redirect reject subscribeToTone transfer unmute updateMetadata updateRecordingStatus,IC3
+/app/calls/{id}/audioRoutingGroups,,list create read update delete,IC3
+/app/calls/{id}/participants,,list read mute configureMixer invite muteAll,IC3
+/communications,getPresencesByUserId,calls,IC3
+/communications/calls,,read delete answer cancelMediaProcessing changeScreenSharingRole keepAlive mute playPrompt recordResponse redirect reject subscribeToTone transfer unmute updateMetadata updateRecordingStatus,IC3
+/communications/calls/{id}/audioRoutingGroups,,list create read update delete,IC3
+/communications/calls/{id}/participants,,list read mute configureMixer invite muteAll,IC3
+/communications/calls/57dab8b1-894c-409a-b240-bd8beae78896/participants/2765eb15-01f8-47c6-b12b-c32111a4a86f,,mute,IC3
+/me/presence,list,,IC3
+/users/{id}/presence,list,,IC3
+https://bot.contoso.com/api,,calls,IC3
+/reports/getTeamsDeviceUsageDistributionUserCounts,read,read,Reports
+/reports/getTeamsDeviceUsageUserCounts,read,read,Reports
+/reports/getTeamsDeviceUsageUserDetail,read,read,Reports
+/reports/getTeamsUserActivityCounts,read,read,Reports
+/reports/getTeamsUserActivityUserCounts,read,read,Reports
+/reports/getTeamsUserActivityUserDetail,read,read,Reports
+/teams/{id}/schedule,list create share,list create share,Shifts
+/teams/{id}/schedule/openShifts,list create read update delete,,Shifts
+/teams/{id}/schedule/openShiftsChangeRequests,list create read approve decline,create,Shifts
+/teams/{id}/schedule/schedulingGroups,list create read update delete,list create read update delete,Shifts
+/teams/{id}/schedule/shifts,list create read update delete,list create read update delete,Shifts
+/teams/{id}/schedule/swapShiftsChangeRequests,list create approve,list create,Shifts
+/teams/{id}/schedule/timeOffReasons,list create read update delete,list create read update delete,Shifts
+/teams/{id}/schedule/timeOffRequests,list update delete approve decline,list update delete approve decline,Shifts
+/teams/{id}/schedule/timesOff,list create read update delete,create read update delete,Shifts
+/teams/schedule/offerShiftRequests,list approve decline,list approve decline,Shifts
+30% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
+0% of Teams Graph APIs are in v1.0 not just beta
+0% of Teams Graph APIs have granular permissions in v1.0
