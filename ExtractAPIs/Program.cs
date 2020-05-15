@@ -383,12 +383,20 @@ namespace ExtractAPIs
             return newApis;
         }
 
-        private static string[] WritePermissions(IEnumerable<string> lines, string permissionType)
+        private static string[] WritePermissions(IEnumerable<string> lines, string permissionType, string newPerm)
         {
             var permsLines = from line in lines
                              where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
                              select line;
-            lines = lines.Select(line => permsLines.Contains(line) ? "XXXXXXXXXXXXXXXXXXXX" : line);
+            lines = lines.Select(line =>
+            {
+                if (!permsLines.Contains(line))
+                    return line;
+                int snipStart = line.IndexOf("|", 1 + line.IndexOf("|"));
+                int snipEnd = line.LastIndexOf("|");
+                string s = line.Substring(0, snipStart + 1) + " " + newPerm + " " + line.Substring(snipEnd);
+                return s;
+            });
             return lines.ToArray();
         }
 
@@ -397,7 +405,6 @@ namespace ExtractAPIs
             if (!pathToApi.Contains(path))
                 return;
             Api api = pathToApi[path].First();
-            Debug.WriteLine($"{api.endpoint}");
             NewPermissions np = newPerms.FirstOrDefault(p => p.resource == api.path && p.verb == api.method);
             if (np == null)
                 return;
@@ -405,14 +412,14 @@ namespace ExtractAPIs
             string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
 
             string[] lines = File.ReadAllLines(path);
-            lines = LinesBefore(lines, line => line.StartsWith("##") &&
-                    (line.EndsWith("Example") || line.EndsWith("Examples")))
-                .ToArray();
 
-
-            var delegatedPerms = WritePermissions(lines, "Delegated(workorschoolaccount)");
-            var appPerms = WritePermissions(delegatedPerms, "Application");
+            var delegatedPerms = WritePermissions(lines, "Delegated(workorschoolaccount)", np.delegated);
+            var appPerms = WritePermissions(delegatedPerms, "Application", np.appPerms);
             string result = string.Join("\n", appPerms);
+
+            string newFilename = path.Replace(@"C:\Users\Nick.000\source\microsoft-graph-docs", @"C:\Users\Nick.000\source\docs-output");
+            Console.WriteLine(newFilename);
+            File.WriteAllLines(newFilename, appPerms);
         }
 
 
