@@ -385,6 +385,7 @@ namespace ExtractAPIs
 
         private static string[] WritePermissions(IEnumerable<string> lines, string permissionType, string newPerm)
         {
+            newPerm = newPerm.Replace('\n', ' ');
             var permsLines = from line in lines
                              where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
                              select line;
