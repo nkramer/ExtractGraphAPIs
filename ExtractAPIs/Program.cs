@@ -4,9 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using CsvHelper;
+using System.Globalization;
+using CsvHelper.Configuration.Attributes;
+using CsvHelper.Configuration;
+using System.Diagnostics;
 
 namespace ExtractAPIs
 {
+    class NewPermissions
+    {
+        [Index(0)]
+        public string verb { get; set; }
+        [Index(1)]
+        public string resource { get; set; }
+        [Index(2)]
+        public string delegated { get; set; }
+        [Index(3)]
+        public string appPerms { get; set; }
+
+        public override string ToString()
+        {
+            return $"{verb} {resource} {delegated} {appPerms}";
+        }
+    }
+
+    //public class FooMap : ClassMap<NewPermissions>
+    //{
+    //    public FooMap()
+    //    {
+    //        Map(m => m.verb).Index(0);
+    //    }
+    //}
+
     class Api 
     { 
         public string method;
@@ -100,28 +130,35 @@ namespace ExtractAPIs
             writer.WriteLine(s);
         }
 
-        class NewPermissions
-        {
-            public string verb;
-            public string resource;
-            public string delegated;
-            public string appPerms;
-        }
-
         static NewPermissions[] newPerms;
         static ILookup<string, Api> pathToApi;
+
 
         static void Main(string[] args)
         {
             Stream output = File.OpenWrite(@"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv");
             writer = new StreamWriter(output);
 
-
-            newPerms = File.ReadLines(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv").Select(line =>
+            using (var reader = new StreamReader(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                string[] parts = line.Split(',');
-                return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
-            }).ToArray();
+                //csv.Configuration.RegisterClassMap<FooMap>();
+                csv.Configuration.HasHeaderRecord = false;
+                csv.Configuration.TrimOptions = CsvHelper.Configuration.TrimOptions.Trim;
+                var records = csv.GetRecords<NewPermissions>().ToArray();
+                newPerms = records.Where(p => p.delegated != "").ToArray();
+            }
+
+            //TextReader reader = new StreamReader(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv");
+            //var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture);
+            //var records = csvReader.GetRecords<NewPermissions>();
+
+            //newPerms = File.ReadLines(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv").Select(line =>
+            //{
+            //    string[] parts = line.Split(',');
+            //    parts = parts.Concat(new string[] { "", "", "", "", "", "", "", "", "", }).ToArray();
+            //    return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
+            //}).Where(p => p.delegated != "").ToArray();
 
             //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
@@ -346,12 +383,22 @@ namespace ExtractAPIs
             return newApis;
         }
 
+        private static string[] WritePermissions(IEnumerable<string> lines, string permissionType)
+        {
+            var permsLines = from line in lines
+                             where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
+                             select line;
+            lines = lines.Select(line => permsLines.Contains(line) ? "XXXXXXXXXXXXXXXXXXXX" : line);
+            return lines.ToArray();
+        }
+
         private static void WriteFile(string path)
         {
             if (!pathToApi.Contains(path))
                 return;
             Api api = pathToApi[path].First();
-            NewPermissions np = newPerms.FirstOrDefault(p => p.resource == api.endpoint && p.verb == api.method);
+            Debug.WriteLine($"{api.endpoint}");
+            NewPermissions np = newPerms.FirstOrDefault(p => p.resource == api.path && p.verb == api.method);
             if (np == null)
                 return;
 
@@ -362,36 +409,10 @@ namespace ExtractAPIs
                     (line.EndsWith("Example") || line.EndsWith("Examples")))
                 .ToArray();
 
-            var teamsHttpCalls = lines.Skip(1)
-                .Where(line =>
-                    ContainsAnyWord(line, requiredWords)
-                    &&
-                    (line.Trim().StartsWith("GET")
-                    || line.Trim().StartsWith("PUT")
-                    || line.Trim().StartsWith("POST")
-                    || line.Trim().StartsWith("PATCH")
-                    || line.Trim().StartsWith("DELETE")))
-                .Select(line => line.Replace("https://graph.microsoft.com/beta", "").Replace("https://graph.microsoft.com/v1.0", ""))
-                .ToArray();
 
-            string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
-            string appPerms = GetPermissions(lines, "Application");
-
-            bool hasGranularPermissions
-                = delegatedPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0
-                && appPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0;
-
-            var newApis = teamsHttpCalls.Select(line => new Api()
-            {
-                method = GetMethod(line),
-                path = GetUrl(line),
-                endpoint = endpoint,
-                delegatedPermissions = delegatedPerms,
-                appPermissions = appPerms,
-                owner = GetOwner(line),
-                hasGranularPermissions = hasGranularPermissions,
-                docFilePath = path,
-            });
+            var delegatedPerms = WritePermissions(lines, "Delegated(workorschoolaccount)");
+            var appPerms = WritePermissions(delegatedPerms, "Application");
+            string result = string.Join("\n", appPerms);
         }
 
 
