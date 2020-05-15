@@ -17,6 +17,7 @@ namespace ExtractAPIs
         public string owner;
         public bool hasGranularPermissions;
         public bool inV1 = false; // only filled in very late in the program
+        public string docFilePath;
 
         public string ShortName
         {
@@ -66,7 +67,7 @@ namespace ExtractAPIs
 
     class Program
     {
-        static string rootpath = @"C:\Users\nkramer\source\repos\microsoft-graph-docs\api-reference";
+        static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs\api-reference";
         //static string rootpath = @"C:\Users\Nick\sources\microsoft-graph-docs\api-reference";
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
@@ -101,12 +102,14 @@ namespace ExtractAPIs
 
         static void Main(string[] args)
         {
-            Stream output = File.OpenWrite(@"C:\Users\nkramer\source\repos\ExtractAPIs\apis.csv");
+            Stream output = File.OpenWrite(@"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv");
             writer = new StreamWriter(output);
 
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
             OutputApis(beta, v1);
+
+            WriteOutputLine("");
 
             Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
             WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
@@ -303,6 +306,7 @@ namespace ExtractAPIs
                 appPermissions = appPerms,
                 owner = GetOwner(line),
                 hasGranularPermissions = hasGranularPermissions,
+                docFilePath = path,
             });
             return newApis;
         }

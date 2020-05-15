@@ -41,7 +41,7 @@ GET   ,/chats/{id}/members/{id},For **user** or **chat** resource:<br/>Chat.Read
 GET   ,/chats/{id}/messages,Chat.Read,Chat.Read.All,GraphFw,False,True
 POST  ,/chats/{id}/messages,Chat.ReadWrite,Not supported,GraphFw,False,True
 GET   ,/chats/{id}/messages/{id},Chat.Read  Chat.ReadWrite,Chat.Read.All,GraphFw,False,True
-GET   ,/chats/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
+GET   ,/chats/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/chats/{id}/messages/{id}/hostedContents/{id},For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/chats/{id}/messages/{id}/replies,Chat.Read  Chat.ReadWrite,Chat.Read.All,GraphFw,False,True
 POST  ,/chats/{id}/messages/{id}/replies,Chat.ReadWrite,Not supported,GraphFw,False,True
@@ -72,8 +72,9 @@ POST  ,/communications/calls/{id}/subscribeToTone,Not Supported,Calls.AccessMedi
 POST  ,/communications/calls/{id}/transfer,Not Supported,Calls.Initiate.All,IC3,True,True
 POST  ,/communications/calls/{id}/unmute,Not supported,None,IC3,True,True
 POST  ,/communications/calls/{id}/updateMetadata,Not Supported,Calls.JoinGroupCallsasGuest.All  Calls.JoinGroupCalls.All  Calls.InitiateGroupCalls.All,IC3,False,True
-POST  ,/communications/calls/{id}/updateRecordingStatus,Not Supported,Calls.JoinGroupCalls.All  Calls.AccessMedia.All,IC3,False,True
+POST  ,/communications/calls/{id}/updateRecordingStatus,Not Supported,Calls.JoinGroupCalls.All  Calls.AccessMedia.All,IC3,True,True
 POST  ,/communications/calls/57dab8b1-894c-409a-b240-bd8beae78896/participants/2765eb15-01f8-47c6-b12b-c32111a4a86f/mute,Not Supported,None,IC3,True,True
+POST  ,/communications/calls/logTeleconferenceDeviceQuality,Not supported,Calls.AccessMedia.All,IC3,True,True
 POST  ,/communications/getPresencesByUserId,Presence.Read.All,Not Supported,IC3,False,True
 PUT   ,/groups/{id}/team,Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
 GET   ,/me/chats,Chat.Read  Chat.ReadWrite,Not supported,GraphFw,False,True
@@ -102,15 +103,15 @@ POST  ,/teams/{id}/channels/{id}/members,Group.ReadWrite.All,Group.ReadWrite.All
 GET   ,/teams/{id}/channels/{id}/members/{id},For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 PATCH ,/teams/{id}/channels/{id}/members/{id},Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,False,False
 DELETE,/teams/{id}/channels/{id}/members/{id},For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
-GET   ,/teams/{id}/channels/{id}/messages,Group.Read.All Group.ReadWrite.All,Group.Read.All Group.ReadWrite.All,GraphFw,False,False
-POST  ,/teams/{id}/channels/{id}/messages,Group.ReadWrite.All,Not supported,GraphFw,False,False
-GET   ,/teams/{id}/channels/{id}/messages/{id},Group.Read.All  Group.ReadWrite.All,Group.Read.All  Group.ReadWrite.All,GraphFw,False,False
-GET   ,/teams/{id}/channels/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
+GET   ,/teams/{id}/channels/{id}/messages,ChannelMessage.Read.All  Group.Read.All Group.ReadWrite.All,ChannelMessage.Read.All  Group.Read.All Group.ReadWrite.All,GraphFw,False,True
+POST  ,/teams/{id}/channels/{id}/messages,Group.ReadWrite.All,Not supported,GraphFw,True,False
+GET   ,/teams/{id}/channels/{id}/messages/{id},ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
+GET   ,/teams/{id}/channels/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/teams/{id}/channels/{id}/messages/{id}/hostedContents/{id},For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
-GET   ,/teams/{id}/channels/{id}/messages/{id}/replies,Group.Read.All Group.ReadWrite.All,Group.Read.All Group.ReadWrite.All,GraphFw,False,False
-POST  ,/teams/{id}/channels/{id}/messages/{id}/replies,Group.ReadWrite.All,Not supported,GraphFw,False,False
-GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id},Group.Read.All  Group.ReadWrite.All,Group.Read.All  Group.ReadWrite.All,GraphFw,False,False
-GET   ,/teams/{id}/channels/{id}/messages/delta,Group.Read.All  Group.ReadWrite.All,Group.Read.All  Group.ReadWrite.All,GraphFw,False,False
+GET   ,/teams/{id}/channels/{id}/messages/{id}/replies,ChannelMessage.Read.All  Group.Read.All Group.ReadWrite.All,ChannelMessage.Read.All  Group.Read.All Group.ReadWrite.All,GraphFw,False,True
+POST  ,/teams/{id}/channels/{id}/messages/{id}/replies,Group.ReadWrite.All,Not supported,GraphFw,True,False
+GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id},ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
+GET   ,/teams/{id}/channels/{id}/messages/delta,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/teams/{id}/channels/{id}/tabs,Group.ReadWrite.All  Group.Read.All,Group.Read.All  Group.ReadWrite.All,GraphFw,True,False
 POST  ,/teams/{id}/channels/{id}/tabs,Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
 GET   ,/teams/{id}/channels/{id}/tabs/{id},Group.Read.All  Group.ReadWrite.All,Group.Read.All  Group.ReadWrite.All,GraphFw,True,False
@@ -121,56 +122,59 @@ GET   ,/teams/{id}/installedApps,Group.Read.All  Group.ReadWrite.All,Group.Read.
 POST  ,/teams/{id}/installedApps,Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
 DELETE,/teams/{id}/installedApps/{id},Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
 POST  ,/teams/{id}/installedApps/{id}/upgrade,Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
-POST  ,/teams/{id}/offerShiftRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,GraphFw,False,False
-GET   ,/teams/{id}/schedule,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-PUT   ,/teams/{id}/schedule,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/openShifts,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,False,False
-POST  ,/teams/{id}/schedule/openShifts,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,False,False
-GET   ,/teams/{id}/schedule/openShifts/{openShiftId},Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,False,False
-PUT   ,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported,Shifts,False,False
-DELETE,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported,Shifts,False,False
-GET   ,/teams/{id}/schedule/openShiftsChangeRequests,Group.ReadWrite.All  Group.Read.All,Not supported,Shifts,False,False
-POST  ,/teams/{id}/schedule/openShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftsChangeRequestId},Group.ReadWrite.All  Group.Read.All,Not supported,Shifts,False,False
-POST  ,/teams/{id}/schedule/openShiftsChangeRequests/approve,Group.ReadWrite.All,Not supported,Shifts,False,False
-POST  ,/teams/{id}/schedule/openShiftsChangeRequests/decline,Group.ReadWrite.All,Not supported,Shifts,False,False
-GET   ,/teams/{id}/schedule/schedulingGroups,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/schedulingGroups,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.Read.All  Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-PUT   ,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-DELETE,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/share,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/shifts,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/shifts,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/shifts/{shiftId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-PUT   ,/teams/{id}/schedule/shifts/{shiftId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-DELETE,/teams/{id}/schedule/shifts/{shiftId},Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/swapShiftsChangeRequests/approve,Group.ReadWrite.All,Not supported,Shifts,False,False
-GET   ,/teams/{id}/schedule/timeOffReasons,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/timeOffReasons,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-PUT   ,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-DELETE,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/timeOffRequests,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-PATCH ,/teams/{id}/schedule/timeOffRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-DELETE,/teams/{id}/schedule/timeOffRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/timeOffRequests/approve,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/{id}/schedule/timeOffRequests/decline,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/timesOff,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,False,False
-POST  ,/teams/{id}/schedule/timesOff,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teams/{id}/schedule/timesOff/{timeOffId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-PUT   ,/teams/{id}/schedule/timesOff/{timeOffId},Group.Read.All  Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-DELETE,/teams/{id}/schedule/timesOff/{timeOffId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
+GET   ,/teams/{id}/schedule,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+PUT   ,/teams/{id}/schedule,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/offerShiftRequests,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/offerShiftRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId}/approve,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId}/decline,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/openShifts,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,True,False
+POST  ,/teams/{id}/schedule/openShifts,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,True,False
+GET   ,/teams/{id}/schedule/openShifts/{openShiftId},Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,True,False
+PUT   ,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported,Shifts,True,False
+DELETE,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported,Shifts,True,False
+GET   ,/teams/{id}/schedule/openShiftsChangeRequests,Group.ReadWrite.All  Group.Read.All,Not supported,Shifts,True,False
+POST  ,/teams/{id}/schedule/openShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftChangeRequestId}/approve,Group.ReadWrite.All,Not supported,Shifts,True,False
+POST  ,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftChangeRequestId}/decline,Group.ReadWrite.All,Not supported,Shifts,True,False
+GET   ,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftsChangeRequestId},Group.ReadWrite.All  Group.Read.All,Not supported,Shifts,True,False
+GET   ,/teams/{id}/schedule/schedulingGroups,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/schedulingGroups,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.Read.All  Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+PUT   ,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+DELETE,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/share,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/shifts,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/shifts,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/shifts/{shiftId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+PUT   ,/teams/{id}/schedule/shifts/{shiftId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+DELETE,/teams/{id}/schedule/shifts/{shiftId},Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/swapShiftsChangeRequests/{swapShiftChangeRequestId}/approve,Group.ReadWrite.All,Not supported,Shifts,True,False
+POST  ,/teams/{id}/schedule/swapShiftsChangeRequests/{swapShiftChangeRequestId}/decline,Group.ReadWrite.All,Not supported,Shifts,True,False
+GET   ,/teams/{id}/schedule/timeOffReasons,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/timeOffReasons,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+PUT   ,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+DELETE,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/timeOffRequests,Schedule.Read.All  Group.Read.All  Schedule.ReadWrite.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,True
+GET   ,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+DELETE,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId}/approve,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+POST  ,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId}/decline,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/timesOff,Group.Read.All  Group.ReadWrite.All,Not supported,Shifts,True,False
+POST  ,/teams/{id}/schedule/timesOff,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+GET   ,/teams/{id}/schedule/timesOff/{timeOffId},Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,True,False
+PUT   ,/teams/{id}/schedule/timesOff/{timeOffId},Group.Read.All  Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
+DELETE,/teams/{id}/schedule/timesOff/{timeOffId},Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,True,False
 POST  ,/teams/{id}/unarchive,Group.ReadWrite.All,Group.ReadWrite.All,GraphFw,True,False
-GET   ,/teams/schedule/offerShiftRequests,Group.Read.All  Group.ReadWrite.All,Schedule.Read.All*  Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/schedule/offerShiftRequests/approve,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-POST  ,/teams/schedule/offerShiftRequests/decline,Group.ReadWrite.All,Schedule.ReadWrite.All*,Shifts,False,False
-GET   ,/teamwork/workforceIntegrations,WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,False,True
-POST  ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,False,True
-PATCH ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,False,True
-DELETE,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,False,True
+GET   ,/teamwork/workforceIntegrations,WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True
+POST  ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True
+PATCH ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True
+GET   ,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,False,True
+DELETE,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True
 GET   ,/users/{id}/chats,Chat.Read  Chat.ReadWrite,Not supported,GraphFw,False,True
 GET   ,/users/{id}/chats/{id},Chat.Read,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True
 GET   ,/users/{id}/chats/{id}/members,Chat.Read  Chat.ReadWrite,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True
@@ -178,7 +182,7 @@ GET   ,/users/{id}/chats/{id}/members/{id},For **user** or **chat** resource:<br
 GET   ,/users/{id}/chats/{id}/messages,Chat.Read,Chat.Read.All,GraphFw,False,True
 POST  ,/users/{id}/chats/{id}/messages,Chat.ReadWrite,Not supported,GraphFw,False,True
 GET   ,/users/{id}/chats/{id}/messages/{id},Chat.Read  Chat.ReadWrite,Chat.Read.All,GraphFw,False,True
-GET   ,/users/{id}/chats/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
+GET   ,/users/{id}/chats/{id}/messages/{id}/hostedContents,For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/users/{id}/chats/{id}/messages/{id}/hostedContents/{id},For **user** or **chat** resource:<br/>Chat.Read  Chat.ReadWrite<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,For **user** or **chat** resource:<br/>Chat.Read.All  Chat.ReadWrite.All<br/><br/>For **channel** resource:<br/>Group.Read.All  Group.ReadWrite.All,GraphFw,False,True
 GET   ,/users/{id}/joinedTeams,User.Read.All  User.ReadWrite.All,User.Read.All  User.ReadWrite.All,GraphFw,True,False
 GET   ,/users/{id}/presence,Presence.Read  Presence.Read.All,Not Supported,IC3,False,True
@@ -187,6 +191,7 @@ POST  ,/users/{id}/teamwork/installedApps,User.ReadWrite.All  Directory.ReadWrit
 DELETE,/users/{id}/teamwork/installedApps/{id},User.ReadWrite.All  Directory.ReadWrite.All,User.ReadWrite.All  Directory.ReadWrite.All,GraphFw,False,False
 POST  ,/users/{id}/teamwork/installedApps/{id}/upgrade,User.ReadWrite.All  Directory.ReadWrite.All,User.ReadWrite.All  Directory.ReadWrite.All,GraphFw,False,False
 POST  ,https://bot.contoso.com/api/calls,Not Supported,None,IC3,True,True
-30% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-21% of Teams Graph APIs are in v1.0 not just beta
-3% of Teams Graph APIs have granular permissions in v1.0
+
+35% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
+63% of Teams Graph APIs are in v1.0 not just beta
+7% of Teams Graph APIs have granular permissions in v1.0
