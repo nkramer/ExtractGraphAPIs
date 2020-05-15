@@ -100,29 +100,52 @@ namespace ExtractAPIs
             writer.WriteLine(s);
         }
 
+        class NewPermissions
+        {
+            public string verb;
+            public string resource;
+            public string delegated;
+            public string appPerms;
+        }
+
+        static NewPermissions[] newPerms;
+        static ILookup<string, Api> pathToApi;
+
         static void Main(string[] args)
         {
             Stream output = File.OpenWrite(@"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv");
             writer = new StreamWriter(output);
 
-            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+
+            newPerms = File.ReadLines(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv").Select(line =>
+            {
+                string[] parts = line.Split(',');
+                return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
+            }).ToArray();
+
+            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            OutputApis(beta, v1);
 
-            WriteOutputLine("");
+            pathToApi = beta.ToLookup(api => api.docFilePath);
+            WriteApis(rootpath + @"\beta\api");
+            //OutputApis(beta, v1);
+            //OutputApis(beta, beta);
 
-            Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
-            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
-            WriteOutputLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
 
-            WriteOutput((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            WriteOutputLine(" of Teams Graph APIs are in v1.0 not just beta");
+            //WriteOutputLine("");
 
-            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
+            //Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
+            //WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
+            //WriteOutputLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
 
-            writer.Close();
-            output.Close();
+            //WriteOutput((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            //WriteOutputLine(" of Teams Graph APIs are in v1.0 not just beta");
+
+            //WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            //WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
+
+            //writer.Close();
+            //output.Close();
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
@@ -234,6 +257,18 @@ namespace ExtractAPIs
             return result;
         }
 
+        private static void WriteApis(string dir)
+        {
+            foreach (var path in Directory.EnumerateFiles(dir))
+            {
+                string shortPath = path.Replace(rootpath + "\\", "");
+                if (Path.GetExtension(path).ToLowerInvariant() == ".md")
+                {
+                    WriteFile(path);
+                }
+            }
+        }
+
         private static string GetPermissions(IEnumerable<string> lines, string permissionType)
         {
             var permsLines = from line in lines
@@ -310,6 +345,55 @@ namespace ExtractAPIs
             });
             return newApis;
         }
+
+        private static void WriteFile(string path)
+        {
+            if (!pathToApi.Contains(path))
+                return;
+            Api api = pathToApi[path].First();
+            NewPermissions np = newPerms.FirstOrDefault(p => p.resource == api.endpoint && p.verb == api.method);
+            if (np == null)
+                return;
+
+            string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
+
+            string[] lines = File.ReadAllLines(path);
+            lines = LinesBefore(lines, line => line.StartsWith("##") &&
+                    (line.EndsWith("Example") || line.EndsWith("Examples")))
+                .ToArray();
+
+            var teamsHttpCalls = lines.Skip(1)
+                .Where(line =>
+                    ContainsAnyWord(line, requiredWords)
+                    &&
+                    (line.Trim().StartsWith("GET")
+                    || line.Trim().StartsWith("PUT")
+                    || line.Trim().StartsWith("POST")
+                    || line.Trim().StartsWith("PATCH")
+                    || line.Trim().StartsWith("DELETE")))
+                .Select(line => line.Replace("https://graph.microsoft.com/beta", "").Replace("https://graph.microsoft.com/v1.0", ""))
+                .ToArray();
+
+            string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
+            string appPerms = GetPermissions(lines, "Application");
+
+            bool hasGranularPermissions
+                = delegatedPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0
+                && appPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0;
+
+            var newApis = teamsHttpCalls.Select(line => new Api()
+            {
+                method = GetMethod(line),
+                path = GetUrl(line),
+                endpoint = endpoint,
+                delegatedPermissions = delegatedPerms,
+                appPermissions = appPerms,
+                owner = GetOwner(line),
+                hasGranularPermissions = hasGranularPermissions,
+                docFilePath = path,
+            });
+        }
+
 
         private static bool IsGranularPermission(string perm)
             //            => !ContainsAnyWord(perm, new string[] { "", "Group.Read.All", "Group.ReadWrite.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All" });
