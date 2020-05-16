@@ -383,9 +383,48 @@ namespace ExtractAPIs
             return newApis;
         }
 
+        class PermListEntry
+        {
+            public string perm;
+
+            public string SortHandle
+            {
+                get
+                {
+                    int rank = 5;
+                    if (perm.Contains(".Group"))
+                        rank = 1;
+                    else if (perm.Contains("Group.ReadWrite"))
+                        rank = 8;
+                    else if (perm.Contains("Directory.ReadWrite"))
+                        rank = 9;
+                    else if (perm.Contains("Group.Read"))
+                        rank = 4;
+                    else if (perm.Contains("Directory.Read"))
+                        rank = 5;
+                    else if (perm.Contains("Write"))
+                        rank = 7;
+                    else if (perm.Contains("ReadBasic"))
+                        rank = 0;
+                    else if (perm.Contains("Read"))
+                        rank = 1;
+                    return rank + perm;
+                }
+            }
+        }
+
         private static string[] WritePermissions(IEnumerable<string> lines, string permissionType, string newPerm)
         {
             newPerm = newPerm.Replace('\n', ' ');
+            var sorted = newPerm.Split(',').Select(p => new PermListEntry() { perm = p.Trim() })
+                .Where(p => p.perm != "")
+                .OrderBy(p => p.SortHandle)
+                .Select(p => p.perm)
+                .ToArray();
+
+            //newPerm = string.Join(", ", newPerm.Split(',').Select(p => p.Trim()).ToArray());
+            newPerm = string.Join(", ", sorted.Select(p => p.Trim()).ToArray());
+
             var permsLines = from line in lines
                              where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
                              select line;
@@ -396,6 +435,8 @@ namespace ExtractAPIs
                 int snipStart = line.IndexOf("|", 1 + line.IndexOf("|"));
                 int snipEnd = line.LastIndexOf("|");
                 string s = line.Substring(0, snipStart + 1) + " " + newPerm + " " + line.Substring(snipEnd);
+                //Console.WriteLine(line.Substring(snipStart) + " " + newPerm);
+                Console.WriteLine(newPerm);
                 return s;
             });
             return lines.ToArray();
@@ -419,7 +460,7 @@ namespace ExtractAPIs
             string result = string.Join("\n", appPerms);
 
             string newFilename = path.Replace(@"C:\Users\Nick.000\source\microsoft-graph-docs", @"C:\Users\Nick.000\source\docs-output");
-            Console.WriteLine(newFilename);
+            //Console.WriteLine(newFilename);
             File.WriteAllLines(newFilename, appPerms);
         }
 
