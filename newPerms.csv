@@ -29,7 +29,7 @@ POST  ,/app/calls/{id}/updateRecordingStatus,,
 GET   ,/appCatalogs/teamsApps,"AppCatalog.Read.All,
 AppCatalog.ReadWrite.All","AppCatalog.Read.All,
 AppCatalog.ReadWrite.All"
-POST  ,/appCatalogs/teamsApps,AppCatalog.ReadWrite.All,AppCatalog.ReadWrite.All
+POST  ,/appCatalogs/teamsApps,AppCatalog.ReadWrite.All,
 PUT   ,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,AppCatalog.ReadWrite.All
 DELETE,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,AppCatalog.ReadWrite.All
 GET   ,/beta/teams/{id}/photo,"Directory.Read.All,
@@ -113,8 +113,7 @@ GET   ,/chats/{id}/messages,"Chat.Read,
 ","Chat.Read.All,
 "
 POST  ,/chats/{id}/messages,"Chat.ReadWrite,
-ChatMessage.Send","Chat.ReadWrite.All,
-"
+ChatMessage.Send",
 GET   ,/chats/{id}/messages/{id},"Chat.Read,
 Chat.ReadWrite,
 ","Chat.Read.All,
@@ -136,8 +135,7 @@ Chat.ReadWrite,
 Chat.ReadWrite.All,
 "
 POST  ,/chats/{id}/messages/{id}/replies,"Chat.ReadWrite,
-ChatMessage.Send","Chat.ReadWrite.All,
-"
+ChatMessage.Send",
 POST  ,/communications/calls,,
 GET   ,/communications/calls/{id},,
 DELETE,/communications/calls/{id},,
@@ -304,8 +302,7 @@ ChannelMessage.Read.All","Group.Read.All,
 Group.ReadWrite.All,
 ChannelMessage.Read.All"
 POST  ,/teams/{id}/channels/{id}/messages,"Group.ReadWrite.All,
-ChannelMessage.Send","Group.ReadWrite.All,
-"
+ChannelMessage.Send",
 GET   ,/teams/{id}/channels/{id}/messages/{id},"Group.Read.All,
 Group.ReadWrite.All,
 ChannelMessage.Read.All","Group.Read.All,
@@ -327,8 +324,7 @@ ChannelMessage.Read.All","Group.Read.All,
 Group.ReadWrite.All,
 ChannelMessage.Read.All"
 POST  ,/teams/{id}/channels/{id}/messages/{id}/replies,"Group.ReadWrite.All,
-ChannelMessage.Send","Group.ReadWrite.All,
-"
+ChannelMessage.Send",
 GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id},"Group.Read.All,
 Group.ReadWrite.All,
 ChannelMessage.Read.All","Group.Read.All,

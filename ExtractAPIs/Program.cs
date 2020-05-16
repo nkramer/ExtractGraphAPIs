@@ -445,6 +445,8 @@ namespace ExtractAPIs
                 string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
                 union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
                 string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());
+                if (replacement.Trim() == "")
+                    replacement = "Not supported.";
 
                 string s = line.Substring(0, snipStart + 1) + " " + replacement + " " + line.Substring(snipEnd);
                 //Console.WriteLine(line.Substring(snipStart) + " " + newPerm);
