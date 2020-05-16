@@ -387,29 +387,35 @@ namespace ExtractAPIs
         {
             public string perm;
 
-            public string SortHandle
+            public string SortHandle 
             {
                 get
                 {
-                    int rank = 5;
-                    if (perm.Contains(".Group"))
-                        rank = 1;
-                    else if (perm.Contains("Group.ReadWrite"))
-                        rank = 8;
-                    else if (perm.Contains("Directory.ReadWrite"))
-                        rank = 9;
-                    else if (perm.Contains("Group.Read"))
-                        rank = 4;
-                    else if (perm.Contains("Directory.Read"))
-                        rank = 5;
-                    else if (perm.Contains("Write"))
-                        rank = 7;
-                    else if (perm.Contains("ReadBasic"))
-                        rank = 0;
-                    else if (perm.Contains("Read"))
-                        rank = 1;
-                    return rank + perm;
+                    return GetSortHandle(this.perm);
                 }
+            }
+
+            public static string GetSortHandle(string perm)
+            {
+                string readwrite = "w";
+                if (perm.Contains("ReadBasic"))
+                    readwrite = "b";
+                else if (perm.Contains("Write"))
+                    readwrite = "w";
+                else if (perm.Contains("Read"))
+                    readwrite = "r";
+
+                string rsc = "z";
+                if (perm.Contains(".Group"))
+                    rsc = "r";
+
+                string resource = "n";
+                if (perm.Contains("Group."))
+                    resource = "o";
+                else if (perm.Contains("Directory."))
+                    resource = "p";
+
+                return $"{readwrite} {rsc} {resource} {perm}";
             }
         }
 
@@ -422,8 +428,8 @@ namespace ExtractAPIs
                 .Select(p => p.perm)
                 .ToArray();
 
-            //newPerm = string.Join(", ", newPerm.Split(',').Select(p => p.Trim()).ToArray());
-            newPerm = string.Join(", ", sorted.Select(p => p.Trim()).ToArray());
+//            string[] newPerms = 
+            //newPerm = string.Join(", ", sorted.Select(p => p.Trim()).ToArray());
 
             var permsLines = from line in lines
                              where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
@@ -434,9 +440,15 @@ namespace ExtractAPIs
                     return line;
                 int snipStart = line.IndexOf("|", 1 + line.IndexOf("|"));
                 int snipEnd = line.LastIndexOf("|");
-                string s = line.Substring(0, snipStart + 1) + " " + newPerm + " " + line.Substring(snipEnd);
+                string oldstr = line.Substring(snipStart+1, snipEnd - snipStart -1);
+                string[] oldPerms = oldstr.Split(',').Select(p => p.Trim()).ToArray();
+                string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
+                union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
+                string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());
+
+                string s = line.Substring(0, snipStart + 1) + " " + replacement + " " + line.Substring(snipEnd);
                 //Console.WriteLine(line.Substring(snipStart) + " " + newPerm);
-                Console.WriteLine(newPerm);
+                Console.WriteLine(replacement);
                 return s;
             });
             return lines.ToArray();
