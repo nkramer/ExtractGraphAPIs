@@ -160,11 +160,12 @@ namespace ExtractAPIs
             //    return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
             //}).Where(p => p.delegated != "").ToArray();
 
-            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            Api[] beta = ReadApis(rootpath + @"\beta\api");
-
-            pathToApi = beta.ToLookup(api => api.docFilePath);
-            WriteApis(rootpath + @"\beta\api");
+            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            pathToApi = v1.ToLookup(api => api.docFilePath);
+            WriteApis(rootpath + @"\v1.0\api");
+            //Api[] beta = ReadApis(rootpath + @"\beta\api");
+            //pathToApi = beta.ToLookup(api => api.docFilePath);
+            //WriteApis(rootpath + @"\beta\api");
             //OutputApis(beta, v1);
             //OutputApis(beta, beta);
 
@@ -397,7 +398,7 @@ namespace ExtractAPIs
 
             public static string GetSortHandle(string perm)
             {
-                string readwrite = "w";
+                string readwrite = "s";
                 if (perm.Contains("ReadBasic"))
                     readwrite = "b";
                 else if (perm.Contains("Write"))
@@ -443,6 +444,7 @@ namespace ExtractAPIs
                 string oldstr = line.Substring(snipStart+1, snipEnd - snipStart -1);
                 string[] oldPerms = oldstr.Split(',').Select(p => p.Trim()).ToArray();
                 string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
+                union = union.Select(p => p.Replace(".Group", ".Group ([RSC](https://aka.ms/teams-rsc))")).ToArray();
                 union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
                 string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());
                 if (replacement.Trim() == "")

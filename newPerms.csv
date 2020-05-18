@@ -27,11 +27,10 @@ POST  ,/app/calls/{id}/unmute,,
 POST  ,/app/calls/{id}/updateMetadata,,
 POST  ,/app/calls/{id}/updateRecordingStatus,,
 GET   ,/appCatalogs/teamsApps,"AppCatalog.Read.All,
-AppCatalog.ReadWrite.All","AppCatalog.Read.All,
-AppCatalog.ReadWrite.All"
+AppCatalog.ReadWrite.All",
 POST  ,/appCatalogs/teamsApps,AppCatalog.ReadWrite.All,
-PUT   ,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,AppCatalog.ReadWrite.All
-DELETE,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,AppCatalog.ReadWrite.All
+PUT   ,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,
+DELETE,/appCatalogs/teamsApps/{id},AppCatalog.ReadWrite.All,
 GET   ,/beta/teams/{id}/photo,"Directory.Read.All,
 Directory.ReadWrite.All,
 Group.Read.All,
@@ -91,9 +90,7 @@ TeamSettings.Read.All,
 TeamSettings.ReadWrite.All"
 GET   ,/chats,"Chat.Read,
 Chat.ReadWrite,
-Chat.ReadBasic","Chat.Read.All,
-Chat.ReadWrite.All,
-Chat.ReadBasic.All"
+Chat.ReadBasic",
 GET   ,/chats/{id},"Chat.Read,
 Chat.ReadWrite,
 Chat.ReadBasic","Chat.Read.All,
