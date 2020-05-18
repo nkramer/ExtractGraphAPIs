@@ -160,12 +160,25 @@ namespace ExtractAPIs
             //    return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
             //}).Where(p => p.delegated != "").ToArray();
 
-            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            pathToApi = v1.ToLookup(api => api.docFilePath);
-            WriteApis(rootpath + @"\v1.0\api");
-            //Api[] beta = ReadApis(rootpath + @"\beta\api");
-            //pathToApi = beta.ToLookup(api => api.docFilePath);
-            //WriteApis(rootpath + @"\beta\api");
+            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            //pathToApi = v1.ToLookup(api => api.docFilePath);
+            //WriteApis(rootpath + @"\v1.0\api");
+            Api[] beta = ReadApis(rootpath + @"\beta\api");
+            pathToApi = beta.ToLookup(api => api.docFilePath);
+            WriteApis(rootpath + @"\beta\api");
+
+            string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
+            foreach (string p in uniquePerms)
+            {
+                Console.WriteLine("{");
+                Console.WriteLine($"  name: \"{p}\",");
+                Console.WriteLine("  description: \"Have full access to user calendars\",");
+                Console.WriteLine("  longDescription: \"Allows the app to create, read, update, and delete events in user calendars.\",");
+                Console.WriteLine("  preview: false,");
+                Console.WriteLine("  admin: false");
+                Console.WriteLine("},");
+            }
+
             //OutputApis(beta, v1);
             //OutputApis(beta, beta);
 
@@ -420,6 +433,8 @@ namespace ExtractAPIs
             }
         }
 
+        static List<string> allPerms = new List<string>();
+
         private static string[] WritePermissions(IEnumerable<string> lines, string permissionType, string newPerm)
         {
             newPerm = newPerm.Replace('\n', ' ');
@@ -446,13 +461,14 @@ namespace ExtractAPIs
                 string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
                 union = union.Select(p => p.Replace(".Group", ".Group ([RSC](https://aka.ms/teams-rsc))")).ToArray();
                 union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
+                allPerms.AddRange(union);
                 string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());
                 if (replacement.Trim() == "")
                     replacement = "Not supported.";
 
                 string s = line.Substring(0, snipStart + 1) + " " + replacement + " " + line.Substring(snipEnd);
                 //Console.WriteLine(line.Substring(snipStart) + " " + newPerm);
-                Console.WriteLine(replacement);
+                //Console.WriteLine(replacement);
                 return s;
             });
             return lines.ToArray();
