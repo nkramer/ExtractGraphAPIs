@@ -160,43 +160,54 @@ namespace ExtractAPIs
             //    return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
             //}).Where(p => p.delegated != "").ToArray();
 
-            //Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
+            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
             //pathToApi = v1.ToLookup(api => api.docFilePath);
             //WriteApis(rootpath + @"\v1.0\api");
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            pathToApi = beta.ToLookup(api => api.docFilePath);
-            WriteApis(rootpath + @"\beta\api");
+            //pathToApi = beta.ToLookup(api => api.docFilePath);
+            //WriteApis(rootpath + @"\beta\api");
 
-            string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
-            foreach (string p in uniquePerms)
-            {
-                Console.WriteLine("{");
-                Console.WriteLine($"  name: \"{p}\",");
-                Console.WriteLine("  description: \"Have full access to user calendars\",");
-                Console.WriteLine("  longDescription: \"Allows the app to create, read, update, and delete events in user calendars.\",");
-                Console.WriteLine("  preview: false,");
-                Console.WriteLine("  admin: false");
-                Console.WriteLine("},");
-            }
+            //string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
+            //foreach (string p in uniquePerms)
+            //{
+            //    Console.WriteLine("{");
+            //    Console.WriteLine($"  name: \"{p}\",");
+            //    Console.WriteLine("  description: \"Have full access to user calendars\",");
+            //    Console.WriteLine("  longDescription: \"Allows the app to create, read, update, and delete events in user calendars.\",");
+            //    Console.WriteLine("  preview: false,");
+            //    Console.WriteLine("  admin: false");
+            //    Console.WriteLine("},");
+            //}
 
-            //OutputApis(beta, v1);
+            OutputApis(beta, v1);
             //OutputApis(beta, beta);
 
+            WriteOutputLine("");
 
-            //WriteOutputLine("");
+            WriteOutputLine("Graph Framework APIs:");
+            ReportStats(beta.Where(api => api.owner == "GraphFw").ToArray());
 
-            //Api[] ourBeta = beta.Where(api => api.owner != "IC3" && api.owner != "Reports").ToArray();
-            //WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
-            //WriteOutputLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
+            WriteOutputLine("Teamwork APIs (includes Shifts):");
+            ReportStats(beta.Where(api => api.owner == "GraphFw" || api.owner == "Shifts").ToArray());
 
-            //WriteOutput((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            //WriteOutputLine(" of Teams Graph APIs are in v1.0 not just beta");
+            WriteOutputLine("Teams Graph Ecosystem (includes Shifts and IC3):");
+            ReportStats(beta);
 
-            //WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
-            //WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
+            writer.Close();
+            output.Close();
+        }
 
-            //writer.Close();
-            //output.Close();
+        private static void ReportStats(Api[] ourBeta)
+        {
+            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)");
+
+            WriteOutput((ourBeta.Count(api => api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs are in v1.0 not just beta");
+
+            WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
+            WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
+            WriteOutputLine("");
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
