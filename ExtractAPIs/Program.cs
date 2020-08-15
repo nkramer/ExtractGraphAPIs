@@ -89,7 +89,7 @@ namespace ExtractAPIs
 
     class Program
     {
-        static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs\api-reference";
+        static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
         static string csvOutput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
         static string permsInput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
         static bool overwriteDocs = false;
@@ -134,41 +134,8 @@ namespace ExtractAPIs
             Stream output = File.OpenWrite(csvOutput);
             writer = new StreamWriter(output);
 
-            using (var reader = new StreamReader(permsInput))
-            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                //csv.Configuration.RegisterClassMap<FooMap>();
-                csv.Configuration.HasHeaderRecord = false;
-                csv.Configuration.TrimOptions = CsvHelper.Configuration.TrimOptions.Trim;
-                var records = csv.GetRecords<NewPermissions>().ToArray();
-                newPerms = records.Where(p => p.delegated != "").ToArray();
-            }
-
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            if (overwriteDocs)
-            {
-                pathToApi = v1.ToLookup(api => api.docFilePath);
-                WriteApisToMarkdown(rootpath + @"\v1.0\api");
-            }
-
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            if (overwriteDocs)
-            {
-                pathToApi = beta.ToLookup(api => api.docFilePath);
-                WriteApisToMarkdown(rootpath + @"\beta\api");
-            }
-
-            //string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
-            //foreach (string p in uniquePerms)
-            //{
-            //    Console.WriteLine("{");
-            //    Console.WriteLine($"  name: \"{p}\",");
-            //    Console.WriteLine("  description: \"Have full access to user calendars\",");
-            //    Console.WriteLine("  longDescription: \"Allows the app to create, read, update, and delete events in user calendars.\",");
-            //    Console.WriteLine("  preview: false,");
-            //    Console.WriteLine("  admin: false");
-            //    Console.WriteLine("},");
-            //}
 
             OutputApisToCsv(beta, v1);
             //OutputApis(beta, beta);
@@ -183,6 +150,37 @@ namespace ExtractAPIs
 
             WriteOutputLine("Teams Graph Ecosystem (includes Shifts and IC3):");
             ReportStats(beta);
+
+            if (overwriteDocs)
+            {
+                using (var reader = new StreamReader(permsInput))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    //csv.Configuration.RegisterClassMap<FooMap>();
+                    csv.Configuration.HasHeaderRecord = false;
+                    csv.Configuration.TrimOptions = CsvHelper.Configuration.TrimOptions.Trim;
+                    var records = csv.GetRecords<NewPermissions>().ToArray();
+                    newPerms = records.Where(p => p.delegated != "").ToArray();
+                }
+
+                pathToApi = v1.ToLookup(api => api.docFilePath);
+                WriteApisToMarkdown(rootpath + @"\v1.0\api");
+
+                pathToApi = beta.ToLookup(api => api.docFilePath);
+                WriteApisToMarkdown(rootpath + @"\beta\api");
+
+                //string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
+                //foreach (string p in uniquePerms)
+                //{
+                //    Console.WriteLine("{");
+                //    Console.WriteLine($"  name: \"{p}\",");
+                //    Console.WriteLine("  description: \"Have full access to user calendars\",");
+                //    Console.WriteLine("  longDescription: \"Allows the app to create, read, update, and delete events in user calendars.\",");
+                //    Console.WriteLine("  preview: false,");
+                //    Console.WriteLine("  admin: false");
+                //    Console.WriteLine("},");
+                //}
+            }
 
             writer.Close();
             output.Close();
@@ -202,6 +200,7 @@ namespace ExtractAPIs
         }
 
         static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
+
         static string GetUrl(string api) {
             int index = api.IndexOf(' ');
             string url = api.Substring(index + 1, api.Length - index - 1);
