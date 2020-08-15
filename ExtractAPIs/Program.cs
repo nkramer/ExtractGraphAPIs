@@ -29,14 +29,6 @@ namespace ExtractAPIs
         }
     }
 
-    //public class FooMap : ClassMap<NewPermissions>
-    //{
-    //    public FooMap()
-    //    {
-    //        Map(m => m.verb).Index(0);
-    //    }
-    //}
-
     class Api 
     { 
         public string method;
@@ -98,7 +90,10 @@ namespace ExtractAPIs
     class Program
     {
         static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs\api-reference";
-        //static string rootpath = @"C:\Users\Nick\sources\microsoft-graph-docs\api-reference";
+        static string csvOutput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
+        static string permsInput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
+        static bool overwriteDocs = false;
+
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForShifts = new string[] { "schedule", "workforceIntegrations" };
@@ -136,10 +131,10 @@ namespace ExtractAPIs
 
         static void Main(string[] args)
         {
-            Stream output = File.OpenWrite(@"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv");
+            Stream output = File.OpenWrite(csvOutput);
             writer = new StreamWriter(output);
 
-            using (var reader = new StreamReader(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv"))
+            using (var reader = new StreamReader(permsInput))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 //csv.Configuration.RegisterClassMap<FooMap>();
@@ -149,23 +144,19 @@ namespace ExtractAPIs
                 newPerms = records.Where(p => p.delegated != "").ToArray();
             }
 
-            //TextReader reader = new StreamReader(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv");
-            //var csvReader = new CsvReader(reader, CultureInfo.CurrentCulture);
-            //var records = csvReader.GetRecords<NewPermissions>();
-
-            //newPerms = File.ReadLines(@"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv").Select(line =>
-            //{
-            //    string[] parts = line.Split(',');
-            //    parts = parts.Concat(new string[] { "", "", "", "", "", "", "", "", "", }).ToArray();
-            //    return new NewPermissions() { verb = parts[0], resource = parts[1], delegated = parts[6], appPerms = parts[7] };
-            //}).Where(p => p.delegated != "").ToArray();
-
             Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            //pathToApi = v1.ToLookup(api => api.docFilePath);
-            //WriteApis(rootpath + @"\v1.0\api");
+            if (overwriteDocs)
+            {
+                pathToApi = v1.ToLookup(api => api.docFilePath);
+                WriteApisToMarkdown(rootpath + @"\v1.0\api");
+            }
+
             Api[] beta = ReadApis(rootpath + @"\beta\api");
-            //pathToApi = beta.ToLookup(api => api.docFilePath);
-            //WriteApis(rootpath + @"\beta\api");
+            if (overwriteDocs)
+            {
+                pathToApi = beta.ToLookup(api => api.docFilePath);
+                WriteApisToMarkdown(rootpath + @"\beta\api");
+            }
 
             //string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
             //foreach (string p in uniquePerms)
@@ -179,7 +170,7 @@ namespace ExtractAPIs
             //    Console.WriteLine("},");
             //}
 
-            OutputApis(beta, v1);
+            OutputApisToCsv(beta, v1);
             //OutputApis(beta, beta);
 
             WriteOutputLine("");
@@ -259,7 +250,8 @@ namespace ExtractAPIs
             }
         }
 
-        static void OutputApis(Api[] apis, Api[] v1Apis)
+        // Create a CSV of all APIs
+        static void OutputApisToCsv(Api[] apis, Api[] v1Apis)
         {
             var v1Lookup = v1Apis.ToLookup(api => api.ShortName);
 
@@ -319,7 +311,8 @@ namespace ExtractAPIs
             return result;
         }
 
-        private static void WriteApis(string dir)
+        // Overwrite the .md files with new permissions info
+        private static void WriteApisToMarkdown(string dir)
         {
             foreach (var path in Directory.EnumerateFiles(dir))
             {
