@@ -256,6 +256,12 @@ namespace ExtractAPIs
 
             if (outputFormat == OutputFormat.ApiPaths || outputFormat == OutputFormat.ApiPathsAndPermissions)
             {
+                WriteOutput("Method,Path");
+                if (outputFormat == OutputFormat.ApiPathsAndPermissions)
+                    WriteOutput(",Delegated Permissions,App Permissions,Owner,In v1.0,Has Granular Permissions,v1.0 + granular");
+
+                WriteOutputLine("");
+
                 foreach (var a in apis)
                 {
                     var v1Api = v1Lookup[a.ShortName].FirstOrDefault();
@@ -265,7 +271,7 @@ namespace ExtractAPIs
                     WriteOutput($"{paddedMethod},{a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        WriteOutput($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions}");
+                        WriteOutput($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions},{v1Api != null && a.hasGranularPermissions}");
 
                     WriteOutputLine("");
                 }
