@@ -29,51 +29,6 @@ namespace ExtractAPIs
         }
     }
 
-    class Api 
-    { 
-        public string method;
-        public string path;
-        public string appPermissions;
-        public string delegatedPermissions;
-        public string endpoint;
-        public string owner;
-        public bool hasGranularPermissions;
-        public bool inV1 = false; // only filled in very late in the program
-        public string docFilePath;
-
-        public string ShortName
-        {
-            get => $"{method} {path}";
-        }
-
-        public string SortHandle
-        {
-            get
-            {
-                int rank = 0;
-                switch (method)
-                {
-                    case "GET": rank = 1; break;
-                    case "PUT": rank = 4; break;
-                    case "POST": rank = 2; break;
-                    case "PATCH": rank = 3; break;
-                    case "DELETE": rank = 5; break;
-                }
-
-                string[] parts = path.Split('/').Select(s => s.PadRight(25).Replace(' ', 'a')).ToArray();
-                string all = $"{String.Join("/", parts)} {rank}";
-                return all;
-            }
-        }
-    }
-
-    // Equality comparison by method and URL
-    class ApiComparer : IEqualityComparer<Api>
-    {
-        public bool Equals(Api x, Api y) => x.method == y.method && x.path == y.path;
-        public int GetHashCode(Api obj) => (obj.method + obj.path).GetHashCode();
-    }
-
     enum OutputFormat
     {
         ApiPaths,
@@ -81,15 +36,9 @@ namespace ExtractAPIs
         Resources,
     }
 
-    class Ownership
-    {
-        public string Name;
-        public string[] KeywordsInPath;
-    }
-
     class Program
     {
-        static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
+        public static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
         static string csvOutput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
         static string permsInput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
         static bool overwriteDocs = false;
@@ -134,8 +83,8 @@ namespace ExtractAPIs
             Stream output = File.OpenWrite(csvOutput);
             writer = new StreamWriter(output);
 
-            Api[] v1 = ReadApis(rootpath + @"\v1.0\api");
-            Api[] beta = ReadApis(rootpath + @"\beta\api");
+            Api[] v1 = ApiReader.ReadApis(rootpath + @"\v1.0\api", ownershipMap, requiredWords);
+            Api[] beta = ApiReader.ReadApis(rootpath + @"\beta\api", ownershipMap, requiredWords);
 
             OutputApisToCsv(beta, v1);
             //OutputApis(beta, beta);
@@ -197,17 +146,6 @@ namespace ExtractAPIs
             WriteOutput((ourBeta.Count(api => api.hasGranularPermissions && api.inV1) * 1.0 / ourBeta.Count()).ToString("P0"));
             WriteOutputLine(" of Teams Graph APIs have granular permissions in v1.0");
             WriteOutputLine("");
-        }
-
-        static string GetMethod(string api) => api.Substring(0, api.IndexOf(' '));
-
-        static string GetUrl(string api) {
-            int index = api.IndexOf(' ');
-            string url = api.Substring(index + 1, api.Length - index - 1);
-            if (url.Contains("("))
-                url = url.Substring(0, url.LastIndexOf("("));
-            url = url.Replace("{teamId}", "{id}");
-            return url;
         }
 
         static bool EndsWithId(string path) => path.EndsWith("}");
@@ -298,24 +236,6 @@ namespace ExtractAPIs
             }
         }
 
-        private static Api[] ReadApis(string dir)
-        {
-            List<Api> apis = new List<Api>();
-
-            foreach (var path in Directory.EnumerateFiles(dir))
-            {
-                string shortPath = path.Replace(rootpath + "\\", "");
-                if (Path.GetExtension(path).ToLowerInvariant() == ".md")
-                {
-                    IEnumerable<Api> newApis = ReadFile(path);
-                    apis.AddRange(newApis);
-                }
-            }
-
-            Api[] result = apis.Distinct(new ApiComparer()).OrderBy(api => api.SortHandle).ToArray();
-            return result;
-        }
-
         // Overwrite the .md files with new permissions info
         private static void WriteApisToMarkdown(string dir)
         {
@@ -327,83 +247,6 @@ namespace ExtractAPIs
                     WriteFile(path);
                 }
             }
-        }
-
-        private static string GetPermissions(IEnumerable<string> lines, string permissionType)
-        {
-            var permsLines = from line in lines
-                             where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
-                             select line.Split('|');
-            string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
-            if (perms.EndsWith("."))
-                perms = perms.Substring(0, perms.Length - 1);
-            return perms;
-        }
-
-        private static IEnumerable<T> LinesBefore<T>(IEnumerable<T> list, Func<T, bool> test)
-        {
-            foreach (var item in list)
-            {
-                if (test(item))
-                    break;
-                else
-                    yield return item;
-            }
-        }
-
-        private static string GetOwner(string path)
-        {
-            foreach (var owner in ownershipMap)
-            {
-                if (ContainsAnyWord(path, owner.KeywordsInPath))
-                    return owner.Name;
-            }
-            return "GraphFW";
-        }
-
-        private static bool ContainsAnyWord(string line, IEnumerable<string> words)
-            => words.Any(word => line.ToLower().Contains(word));
-
-        private static IEnumerable<Api> ReadFile(string path)
-        {
-            string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
-
-            string[] lines = File.ReadAllLines(path);
-            lines = LinesBefore(lines, line => line.StartsWith("##") &&
-                    (line.EndsWith("Example") || line.EndsWith("Examples")))
-                .ToArray();
-
-            var teamsHttpCalls = lines.Skip(1)
-                .Where(line =>
-                    ContainsAnyWord(line, requiredWords)
-                    &&
-                    (line.Trim().StartsWith("GET")
-                    || line.Trim().StartsWith("PUT")
-                    || line.Trim().StartsWith("POST")
-                    || line.Trim().StartsWith("PATCH")
-                    || line.Trim().StartsWith("DELETE")))
-                .Select(line => line.Replace("https://graph.microsoft.com/beta", "").Replace("https://graph.microsoft.com/v1.0", ""))
-                .ToArray();
-
-            string delegatedPerms = GetPermissions(lines, "Delegated(workorschoolaccount)");
-            string appPerms = GetPermissions(lines, "Application");
-
-            bool hasGranularPermissions
-                = delegatedPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0
-                && appPerms.Split(' ').Where(perm => IsGranularPermission(perm)).Count() > 0;
-
-            var newApis = teamsHttpCalls.Select(line => new Api()
-            {
-                method = GetMethod(line),
-                path = GetUrl(line),
-                endpoint = endpoint,
-                delegatedPermissions = delegatedPerms,
-                appPermissions = appPerms,
-                owner = GetOwner(line),
-                hasGranularPermissions = hasGranularPermissions,
-                docFilePath = path,
-            });
-            return newApis;
         }
 
         class PermListEntry
@@ -453,9 +296,6 @@ namespace ExtractAPIs
                 .Select(p => p.perm)
                 .ToArray();
 
-//            string[] newPerms = 
-            //newPerm = string.Join(", ", sorted.Select(p => p.Trim()).ToArray());
-
             var permsLines = from line in lines
                              where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
                              select line;
@@ -504,11 +344,5 @@ namespace ExtractAPIs
             //Console.WriteLine(newFilename);
             File.WriteAllLines(newFilename, appPerms);
         }
-
-
-        private static bool IsGranularPermission(string perm)
-            //            => !ContainsAnyWord(perm, new string[] { "", "Group.Read.All", "Group.ReadWrite.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All" });
-            => !new string[] { "", "Group.Read.All", "Group.ReadWrite.All", "User.Read.All", "User.ReadWrite.All", "Directory.Read.All", "Directory.ReadWrite.All" }
-            .Contains(perm);
     }
 }
