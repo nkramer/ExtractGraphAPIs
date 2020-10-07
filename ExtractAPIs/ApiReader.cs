@@ -18,6 +18,7 @@ namespace ExtractAPIs
         public bool hasGranularPermissions;
         public bool inV1 = false; // only filled in very late in the program
         public string docFilePath;
+        public string docUrl;
 
         public string ShortName
         {
@@ -60,16 +61,17 @@ namespace ExtractAPIs
 
     public class ApiReader
     {
-        public static Api[] ReadApis(string dir, Ownership[] ownershipMap, string[] requiredWords)
+        public static Api[] ReadApis(string docDirectoryPath, Ownership[] ownershipMap, string[] requiredWords, string docUrlSuffix)
         {
             List<Api> apis = new List<Api>();
 
-            foreach (var path in Directory.EnumerateFiles(dir))
+            foreach (var path in Directory.EnumerateFiles(docDirectoryPath))
             {
                 string shortPath = path.Replace(Program.rootpath + "\\", "");
                 if (Path.GetExtension(path).ToLowerInvariant() == ".md")
                 {
-                    IEnumerable<Api> newApis = ReadFile(path, ownershipMap, requiredWords);
+                    IEnumerable<Api> newApis = ReadFile(path, ownershipMap, requiredWords,
+                        docUrl: "https://docs.microsoft.com/graph/api/" + path.Substring(docDirectoryPath.Length + 1).Replace(".md", "") + docUrlSuffix);
                     apis.AddRange(newApis);
                 }
             }
@@ -78,11 +80,11 @@ namespace ExtractAPIs
             return result;
         }
 
-        private static IEnumerable<Api> ReadFile(string path, Ownership[] ownershipMap, string[] requiredWords)
+        private static IEnumerable<Api> ReadFile(string docFilePath, Ownership[] ownershipMap, string[] requiredWords, string docUrl)
         {
-            string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
+            string endpoint = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(docFilePath)));
 
-            string[] lines = File.ReadAllLines(path);
+            string[] lines = File.ReadAllLines(docFilePath);
             lines = LinesBefore(lines, line => line.StartsWith("##") &&
                     (line.EndsWith("Example") || line.EndsWith("Examples")))
                 .ToArray();
@@ -115,7 +117,8 @@ namespace ExtractAPIs
                 appPermissions = appPerms,
                 owner = GetOwner(line, ownershipMap),
                 hasGranularPermissions = hasGranularPermissions,
-                docFilePath = path,
+                docFilePath = docFilePath,
+                docUrl = docUrl,
             });
             return newApis;
         }
@@ -154,11 +157,11 @@ namespace ExtractAPIs
             return perms;
         }
 
-        private static string GetOwner(string path, Ownership[] ownershipMap)
+        private static string GetOwner(string docFilePath, Ownership[] ownershipMap)
         {
             foreach (var owner in ownershipMap)
             {
-                if (ContainsAnyWord(path, owner.KeywordsInPath))
+                if (ContainsAnyWord(docFilePath, owner.KeywordsInPath))
                     return owner.Name;
             }
             return "GraphFW";

@@ -65,8 +65,8 @@ namespace ExtractAPIs
             Stream output = File.OpenWrite(csvOutput);
             writer = new StreamWriter(output);
 
-            Api[] v1 = ApiReader.ReadApis(rootpath + @"\v1.0\api", ownershipMap, requiredWords);
-            Api[] beta = ApiReader.ReadApis(rootpath + @"\beta\api", ownershipMap, requiredWords);
+            Api[] v1 = ApiReader.ReadApis(rootpath + @"\v1.0\api", ownershipMap, requiredWords, docUrlSuffix: "?view=graph-rest-v1.0");
+            Api[] beta = ApiReader.ReadApis(rootpath + @"\beta\api", ownershipMap, requiredWords, docUrlSuffix: "?view=graph-rest-beta");
 
             OutputApisToCsv(beta, v1);
             //OutputApis(beta, beta);
@@ -192,7 +192,8 @@ namespace ExtractAPIs
                     WriteOutput($"{paddedMethod},{a.path}");
 
                     if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                        WriteOutput($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions},{v1Api != null && a.hasGranularPermissions}");
+                        WriteOutput($",{a.delegatedPermissions},{a.appPermissions},{a.owner},{v1Api != null},{a.hasGranularPermissions},{v1Api != null && a.hasGranularPermissions},"
+                            + $"{a.docUrl}");
 
                     WriteOutputLine("");
                 }
