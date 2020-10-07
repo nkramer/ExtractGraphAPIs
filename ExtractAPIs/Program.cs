@@ -12,23 +12,6 @@ using System.Diagnostics;
 
 namespace ExtractAPIs
 {
-    class NewPermissions
-    {
-        [Index(0)]
-        public string verb { get; set; }
-        [Index(1)]
-        public string resource { get; set; }
-        [Index(2)]
-        public string delegated { get; set; }
-        [Index(3)]
-        public string appPerms { get; set; }
-
-        public override string ToString()
-        {
-            return $"{verb} {resource} {delegated} {appPerms}";
-        }
-    }
-
     enum OutputFormat
     {
         ApiPaths,
@@ -74,7 +57,6 @@ namespace ExtractAPIs
             writer.WriteLine(s);
         }
 
-        static NewPermissions[] newPerms;
         static ILookup<string, Api> pathToApi;
 
 
@@ -102,6 +84,7 @@ namespace ExtractAPIs
 
             if (overwriteDocs)
             {
+                NewPermissions[] newPerms;
                 using (var reader = new StreamReader(permsInput))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
@@ -113,10 +96,10 @@ namespace ExtractAPIs
                 }
 
                 pathToApi = v1.ToLookup(api => api.docFilePath);
-                WriteApisToMarkdown(rootpath + @"\v1.0\api");
+                WriteApisToMarkdown(rootpath + @"\v1.0\api", newPerms);
 
                 pathToApi = beta.ToLookup(api => api.docFilePath);
-                WriteApisToMarkdown(rootpath + @"\beta\api");
+                WriteApisToMarkdown(rootpath + @"\beta\api", newPerms);
 
                 //string[] uniquePerms = allPerms.Distinct().Where(s => !s.Contains(".Group")).OrderBy(s => s).ToArray();
                 //foreach (string p in uniquePerms)
@@ -237,93 +220,22 @@ namespace ExtractAPIs
         }
 
         // Overwrite the .md files with new permissions info
-        private static void WriteApisToMarkdown(string dir)
+        private static void WriteApisToMarkdown(string dir, NewPermissions[] newPerms)
         {
             foreach (var path in Directory.EnumerateFiles(dir))
             {
                 string shortPath = path.Replace(rootpath + "\\", "");
                 if (Path.GetExtension(path).ToLowerInvariant() == ".md")
                 {
-                    WriteFile(path);
+                    WriteFile(path, newPerms);
                 }
             }
         }
 
-        class PermListEntry
-        {
-            public string perm;
+        //static List<string> allPerms = new List<string>();
 
-            public string SortHandle 
-            {
-                get
-                {
-                    return GetSortHandle(this.perm);
-                }
-            }
 
-            public static string GetSortHandle(string perm)
-            {
-                string readwrite = "s";
-                if (perm.Contains("ReadBasic"))
-                    readwrite = "b";
-                else if (perm.Contains("Write"))
-                    readwrite = "w";
-                else if (perm.Contains("Read"))
-                    readwrite = "r";
-
-                string rsc = "z";
-                if (perm.Contains(".Group"))
-                    rsc = "r";
-
-                string resource = "n";
-                if (perm.Contains("Group."))
-                    resource = "o";
-                else if (perm.Contains("Directory."))
-                    resource = "p";
-
-                return $"{readwrite} {rsc} {resource} {perm}";
-            }
-        }
-
-        static List<string> allPerms = new List<string>();
-
-        private static string[] WritePermissions(IEnumerable<string> lines, string permissionType, string newPerm)
-        {
-            newPerm = newPerm.Replace('\n', ' ');
-            var sorted = newPerm.Split(',').Select(p => new PermListEntry() { perm = p.Trim() })
-                .Where(p => p.perm != "")
-                .OrderBy(p => p.SortHandle)
-                .Select(p => p.perm)
-                .ToArray();
-
-            var permsLines = from line in lines
-                             where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
-                             select line;
-            lines = lines.Select(line =>
-            {
-                if (!permsLines.Contains(line))
-                    return line;
-                int snipStart = line.IndexOf("|", 1 + line.IndexOf("|"));
-                int snipEnd = line.LastIndexOf("|");
-                string oldstr = line.Substring(snipStart+1, snipEnd - snipStart -1);
-                string[] oldPerms = oldstr.Split(',').Select(p => p.Trim()).ToArray();
-                string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
-                union = union.Select(p => p.Replace(".Group", ".Group ([RSC](https://aka.ms/teams-rsc))")).ToArray();
-                union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
-                allPerms.AddRange(union);
-                string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());
-                if (replacement.Trim() == "")
-                    replacement = "Not supported.";
-
-                string s = line.Substring(0, snipStart + 1) + " " + replacement + " " + line.Substring(snipEnd);
-                //Console.WriteLine(line.Substring(snipStart) + " " + newPerm);
-                //Console.WriteLine(replacement);
-                return s;
-            });
-            return lines.ToArray();
-        }
-
-        private static void WriteFile(string path)
+        private static void WriteFile(string path, NewPermissions[] newPerms)
         {
             if (!pathToApi.Contains(path))
                 return;
@@ -336,8 +248,8 @@ namespace ExtractAPIs
 
             string[] lines = File.ReadAllLines(path);
 
-            var delegatedPerms = WritePermissions(lines, "Delegated(workorschoolaccount)", np.delegated);
-            var appPerms = WritePermissions(delegatedPerms, "Application", np.appPerms);
+            var delegatedPerms = Permissions.WritePermissions(lines, "Delegated(workorschoolaccount)", np.delegated);
+            var appPerms = Permissions.WritePermissions(delegatedPerms, "Application", np.appPerms);
             string result = string.Join("\n", appPerms);
 
             string newFilename = path.Replace(@"C:\Users\Nick.000\source\microsoft-graph-docs", @"C:\Users\Nick.000\source\docs-output");
