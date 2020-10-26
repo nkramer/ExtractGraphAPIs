@@ -47,7 +47,8 @@ namespace ExtractAPIs
                 string oldstr = line.Substring(snipStart + 1, snipEnd - snipStart - 1);
                 string[] oldPerms = oldstr.Split(',').Select(p => p.Trim()).ToArray();
                 string[] union = oldPerms.Union(sorted).OrderBy(p => PermListEntry.GetSortHandle(p)).Where(p => p.Trim() != "").ToArray();
-                union = union.Select(p => p.Replace(".Group", ".Group ([RSC](https://aka.ms/teams-rsc))")).ToArray();
+                union = union.Select(p => p.Replace(".Group*", ".Group")).ToArray();
+                union = union.Select(p => p.Replace(".Group", ".Group*")).ToArray();
                 union = union.Where(p => !p.StartsWith("Not supported")).ToArray();
                 //allPerms.AddRange(union);
                 string replacement = string.Join(", ", union.Select(p => p.Trim()).ToArray());

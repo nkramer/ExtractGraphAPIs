@@ -22,9 +22,10 @@ namespace ExtractAPIs
     class Program
     {
         public static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs\api-reference";
-        static string csvOutput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
-        static string permsInput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
-        static bool overwriteDocs = false;
+        static string csvOutput       = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
+        static string permsInput      = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
+        static string replacementDocs = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
+        static bool overwriteDocs = true;
 
         static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
         static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
@@ -253,7 +254,7 @@ namespace ExtractAPIs
             var appPerms = Permissions.WritePermissions(delegatedPerms, "Application", np.appPerms);
             string result = string.Join("\n", appPerms);
 
-            string newFilename = path.Replace(@"C:\Users\Nick.000\source\microsoft-graph-docs", @"C:\Users\Nick.000\source\docs-output");
+            string newFilename = path.Replace(rootpath, replacementDocs);
             //Console.WriteLine(newFilename);
             File.WriteAllLines(newFilename, appPerms);
         }
