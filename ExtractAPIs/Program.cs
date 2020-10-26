@@ -21,7 +21,7 @@ namespace ExtractAPIs
 
     class Program
     {
-        public static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
+        public static string rootpath = @"C:\Users\Nick.000\source\microsoft-graph-docs\api-reference";
         static string csvOutput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
         static string permsInput = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
         static bool overwriteDocs = false;
