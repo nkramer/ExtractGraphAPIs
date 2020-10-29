@@ -42,6 +42,8 @@ namespace ExtractAPIs
             {
                 if (!permsLines.Contains(line))
                     return line;
+                if (line.Contains("**"))
+                    return line;
                 int snipStart = line.IndexOf("|", 1 + line.IndexOf("|"));
                 int snipEnd = line.LastIndexOf("|");
                 string oldstr = line.Substring(snipStart + 1, snipEnd - snipStart - 1);
@@ -92,10 +94,12 @@ namespace ExtractAPIs
                 string resource = "n";
                 if (perm.Contains("Group."))
                     resource = "o";
-                else if (perm.Contains("Directory."))
+                else if (perm.Contains("Sites."))
                     resource = "p";
+                else if (perm.Contains("Directory."))
+                    resource = "q";
 
-                return $"{readwrite} {rsc} {resource} {perm}";
+                return $"{resource} {rsc} {readwrite} {perm}";
             }
         }
 

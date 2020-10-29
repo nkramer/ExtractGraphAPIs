@@ -13,6 +13,8 @@ namespace ExtractAPIs
         public string path;
         public string appPermissions;
         public string delegatedPermissions;
+        public string appPermissionsDocs;
+        public string delegatedPermissionsDocs;
         public string endpoint;
         public string owner;
         public bool hasGranularPermissions;
@@ -115,6 +117,8 @@ namespace ExtractAPIs
                 endpoint = endpoint,
                 delegatedPermissions = delegatedPerms,
                 appPermissions = appPerms,
+                delegatedPermissionsDocs = GetPermissionsDocs(lines, "Delegated(workorschoolaccount)"),
+                appPermissionsDocs = GetPermissionsDocs(lines, "Application"),
                 owner = GetOwner(line, ownershipMap),
                 hasGranularPermissions = hasGranularPermissions,
                 docFilePath = docFilePath,
@@ -154,6 +158,15 @@ namespace ExtractAPIs
             string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
             if (perms.EndsWith("."))
                 perms = perms.Substring(0, perms.Length - 1);
+            return perms;
+        }
+
+        private static string GetPermissionsDocs(IEnumerable<string> lines, string permissionType)
+        {
+            var permsLines = from line in lines
+                             where line.Trim().Replace(" ", "").Replace("\t", "").StartsWith($"|{permissionType}|")
+                             select line.Split('|');
+            string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2];
             return perms;
         }
 

@@ -83,6 +83,20 @@ namespace ExtractAPIs
             WriteOutputLine("Teams Graph Ecosystem (includes Shifts and IC3):");
             ReportStats(beta);
 
+            //if (true)
+            //{
+            //    using (var writer = new StreamWriter(@"C:\Users\Nick.000\source\ExtractGraphAPIs\perms.csv"))
+            //    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            //    {
+            //        //csv.Configuration.RegisterClassMap<FooMap>();
+            //        csv.Configuration.HasHeaderRecord = true;
+            //        csv.Configuration.TrimOptions = CsvHelper.Configuration.TrimOptions.Trim;
+
+            //        var records = beta.Select(api => new { verb = api.method, resource = api.path, delegated = api.delegatedPermissionsDocs, appPerms = api.appPermissionsDocs }).ToArray();
+            //        csv.WriteRecords(records);
+            //    }
+            //}
+
             if (overwriteDocs)
             {
                 NewPermissions[] newPerms;
@@ -256,7 +270,10 @@ namespace ExtractAPIs
 
             string newFilename = path.Replace(rootpath, replacementDocs);
             //Console.WriteLine(newFilename);
-            File.WriteAllLines(newFilename, appPerms);
+            if (api.owner == "GraphFw")
+                File.WriteAllLines(newFilename, appPerms);
+            else
+                File.WriteAllLines(newFilename, lines);
         }
     }
 }
