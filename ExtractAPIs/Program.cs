@@ -25,17 +25,15 @@ namespace ExtractAPIs
         static string csvOutput       = @"C:\Users\Nick.000\source\ExtractGraphAPIs\apis.csv";
         static string permsInput      = @"C:\Users\Nick.000\source\ExtractGraphAPIs\newPerms.csv";
         static string replacementDocs = @"C:\Users\Nick.000\source\microsoft-graph-docs2\api-reference";
-        static bool overwriteDocs = true;
+        static bool overwriteDocs = false;
 
-        static string[] requiredWords = new string[] { "team", "chat", "calls", "onlineMeetings", "presence" };
-        static string[] requiredWordsForIC3 = new string[] { "calls", "onlineMeetings", "presence" };
-        static string[] requiredWordsForShifts = new string[] { "schedule", "workforceIntegrations" };
+        static string[] requiredWords = new string[] { "team", "chat", "calls", "communications", "onlineMeetings", "presence" };
 
         // A list of (string, string list) pairs. First string is the owner, 
         // second string is the keywords the path needs to contain to belong to that owner. Order matters.
         static Ownership[] ownershipMap = new Ownership[]
             {
-                new Ownership() { Name = "IC3", KeywordsInPath = new string[] { "calls", "onlineMeetings", "presence" } },
+                new Ownership() { Name = "IC3", KeywordsInPath = new string[] { "calls", "communications", "onlineMeetings", "presence" } },
                 new Ownership() { Name = "Reports", KeywordsInPath = new string[] { "reports" } },
                 new Ownership() { Name = "Shifts", KeywordsInPath = new string[] { "schedule", "workforceIntegrations" } },
                 new Ownership() { Name = "GraphFw", KeywordsInPath = new string[] { "/" } },
@@ -43,23 +41,8 @@ namespace ExtractAPIs
 
         //static OutputFormat outputFormat = OutputFormat.Resources;
         static OutputFormat outputFormat = OutputFormat.ApiPathsAndPermissions;
-
         static StreamWriter writer;
-
-            static void WriteOutput(string s)
-        {
-            Console.Write(s);
-            writer.Write(s);
-        }
-
-        static void WriteOutputLine(string s)
-        {
-            Console.WriteLine(s);
-            writer.WriteLine(s);
-        }
-
         static ILookup<string, Api> pathToApi;
-
 
         static void Main(string[] args)
         {
@@ -194,7 +177,7 @@ namespace ExtractAPIs
             {
                 WriteOutput("Method,Path");
                 if (outputFormat == OutputFormat.ApiPathsAndPermissions)
-                    WriteOutput(",Delegated Permissions,App Permissions,Owner,In v1.0,Has Granular Permissions,v1.0 + granular");
+                    WriteOutput(",Delegated Permissions,App Permissions,Owner,In v1.0,Has Granular Permissions,v1.0 + granular,Doc link");
 
                 WriteOutputLine("");
 
@@ -274,6 +257,18 @@ namespace ExtractAPIs
                 File.WriteAllLines(newFilename, appPerms);
             else
                 File.WriteAllLines(newFilename, lines);
+        }
+
+        static void WriteOutput(string s)
+        {
+            Console.Write(s);
+            writer.Write(s);
+        }
+
+        static void WriteOutputLine(string s)
+        {
+            Console.WriteLine(s);
+            writer.WriteLine(s);
         }
     }
 }
