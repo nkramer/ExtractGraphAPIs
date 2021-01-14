@@ -27,6 +27,7 @@ POST  ,/app/calls/{id}/transfer,Not Supported,Calls.Initiate.All,IC3,False,True,
 POST  ,/app/calls/{id}/unmute,Not supported,None,IC3,False,True,False,https://docs.microsoft.com/graph/api/call-unmute?view=graph-rest-beta
 POST  ,/app/calls/{id}/updateMetadata,Not Supported,Calls.JoinGroupCallsasGuest.All  Calls.JoinGroupCalls.All  Calls.InitiateGroupCalls.All,IC3,False,True,False,https://docs.microsoft.com/graph/api/call-updatemetadata?view=graph-rest-beta
 POST  ,/app/calls/{id}/updateRecordingStatus,Not Supported,Calls.JoinGroupCalls.All  Calls.AccessMedia.All,IC3,False,True,False,https://docs.microsoft.com/graph/api/call-updaterecordingstatus?view=graph-rest-beta
+GET   ,/app/onlineMeetings/?$filter=VideoTeleconferenceId%20eq%20'{id}',OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
 POST  ,/appCatalogs/teamsApps?requiresReview:{Boolean},AppCatalog.Submit  AppCatalog.ReadWrite.All  Directory.ReadWrite.All,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamsapp-publish?view=graph-rest-beta
 GET   ,/appCatalogs/teamsApps,AppCatalog.Submit  AppCatalog.Read.All  AppCatalog.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/appcatalogs-list-teamsapps?view=graph-rest-beta
 POST  ,/appCatalogs/teamsApps,AppCatalog.Submit  AppCatalog.ReadWrite.All  Directory.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/teamsapp-publish?view=graph-rest-beta
@@ -105,6 +106,11 @@ GET   ,/me/chats/{chat-id},Chat.ReadBasic  Chat.Read  Chat.ReadWrite,Not support
 GET   ,/me/chats/{id}/messages,Chat.Read  Chat.ReadWrite,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-list-message?view=graph-rest-beta
 GET   ,/me/chats/{id}/messages/{id},Chat.Read  Chat.ReadWrite,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-get-message?view=graph-rest-beta
 GET   ,/me/joinedTeams,Team.ReadBasic.All  TeamSettings.Read.All  TeamSettings.ReadWrite.All  User.Read.All  User.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,Team.ReadBasic.All  TeamSettings.Read.All  TeamSettings.ReadWrite.All  User.Read.All  User.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/user-list-joinedteams?view=graph-rest-beta
+POST  ,/me/onlineMeetings,OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,True,True,True,https://docs.microsoft.com/graph/api/application-post-onlinemeetings?view=graph-rest-beta
+GET   ,/me/onlineMeetings/{meetingId},OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+PATCH ,/me/onlineMeetings/{meetingId},OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-update?view=graph-rest-beta
+DELETE,/me/onlineMeetings/{meetingId},OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-delete?view=graph-rest-beta
+POST  ,/me/onlineMeetings/createOrGet,OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,True,True,True,https://docs.microsoft.com/graph/api/onlinemeeting-createorget?view=graph-rest-beta
 GET   ,/me/presence,Presence.Read  Presence.Read.All,Not Supported,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-get?view=graph-rest-beta
 GET   ,/reports/getTeamsDeviceUsageDistributionUserCounts,Reports.Read.All,Reports.Read.All,Reports,True,True,True,https://docs.microsoft.com/graph/api/reportroot-getteamsdeviceusagedistributionusercounts?view=graph-rest-beta
 GET   ,/reports/getTeamsDeviceUsageUserCounts,Reports.Read.All,Reports.Read.All,Reports,True,True,True,https://docs.microsoft.com/graph/api/reportroot-getteamsdeviceusageusercounts?view=graph-rest-beta
@@ -213,11 +219,11 @@ PATCH ,/teams/{team-id}/members/{membership-id},TeamMember.ReadWrite.All,TeamMem
 DELETE,/teams/{team-id}/members/{membership-id},TeamMember.ReadWrite.All,TeamMember.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/team-delete-members?view=graph-rest-beta
 POST  ,/teams/{team-id}/members/add,TeamMember.ReadWrite.All,TeamMember.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/conversationmembers-add?view=graph-rest-beta
 PATCH ,/teams/,Not supported,Chat.UpdatePolicyViolation.All for a chat message.</br>ChannelMessage.UpdatePolicyViolation.All for a channel message,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessage-update?view=graph-rest-beta
-GET   ,/teamwork/workforceIntegrations,WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-list?view=graph-rest-beta
-POST  ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-post?view=graph-rest-beta
-PATCH ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-update?view=graph-rest-beta
-GET   ,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-get?view=graph-rest-beta
-DELETE,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-delete?view=graph-rest-beta
+GET   ,/teamwork/workforceIntegrations,WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,Shifts,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-list?view=graph-rest-beta
+POST  ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,Shifts,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-post?view=graph-rest-beta
+PATCH ,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported,Shifts,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-update?view=graph-rest-beta
+GET   ,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.Read.All  WorkforceIntegration.ReadWrite.All,Not supported,Shifts,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-get?view=graph-rest-beta
+DELETE,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.ReadWrite.All,Not supported,Shifts,True,True,True,https://docs.microsoft.com/graph/api/workforceintegration-delete?view=graph-rest-beta
 GET   ,/users/{id}/chats/{id}/messages,Chat.Read  Chat.ReadWrite,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-list-message?view=graph-rest-beta
 POST  ,/users/{id}/chats/{id}/messages,ChatMessage.Send  Chat.ReadWrite,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-post-message?view=graph-rest-beta
 GET   ,/users/{id}/chats/{id}/messages/{id},Chat.Read  Chat.ReadWrite,Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-get-message?view=graph-rest-beta
@@ -237,6 +243,15 @@ GET   ,/users/{user-id}/teamwork/installedApps/{app-installation-id},TeamsAppIns
 DELETE,/users/{user-id}/teamwork/installedApps/{app-installation-id},TeamsAppInstallation.ReadWriteSelfForUser  TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadWriteSelfForUser.All  TeamsAppInstallation.ReadWriteForUser.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/userteamwork-delete-installedapps?view=graph-rest-beta
 GET   ,/users/{user-id}/teamwork/installedApps/{app-installation-id}/chat,TeamsAppInstallation.ReadForUser  TeamsAppInstallation.ReadWriteSelfForUser  TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadForUser.All  TeamsAppInstallation.ReadWriteSelfForUser.All  TeamsAppInstallation.ReadWriteForUser.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/userscopeteamsappinstallation-get-chat?view=graph-rest-beta
 POST  ,/users/{user-id}/teamwork/installedApps/{app-installation-id}/upgrade,TeamsAppInstallation.ReadWriteSelfForUser  TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadWriteSelfForUser.All  TeamsAppInstallation.ReadWriteForUser.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/userteamwork-teamsappinstallation-upgrade?view=graph-rest-beta
+GET   ,/users/{userId}/onlineMeetings?$filter=JoinWebUrl%20eq%20'{joinWebUrl}',OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+POST  ,/users/{userId}/onlineMeetings,OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/application-post-onlinemeetings?view=graph-rest-beta
+GET   ,/users/{userId}/onlineMeetings/{meetingId},OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+PATCH ,/users/{userId}/onlineMeetings/{meetingId},OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-update?view=graph-rest-beta
+DELETE,/users/{userId}/onlineMeetings/{meetingId},OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-delete?view=graph-rest-beta
+GET   ,/users/{userId}/onlineMeetings/{meetingId}/alternativeRecording,OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+GET   ,/users/{userId}/onlineMeetings/{meetingId}/attendeeReport,OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+GET   ,/users/{userId}/onlineMeetings/{meetingId}/recording,OnlineMeetings.Read  OnlineMeetings.ReadWrite,OnlineMeetings.Read.All  OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-get?view=graph-rest-beta
+POST  ,/users/{userId}/onlineMeetings/createOrGet,OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All*,IC3,False,True,False,https://docs.microsoft.com/graph/api/onlinemeeting-createorget?view=graph-rest-beta
 POST  ,/users/{userId}/teamwork/sendActivityNotification,TeamsActivity.Send,TeamsActivity.Send,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/userteamwork-sendactivitynotification?view=graph-rest-beta
 PATCH ,/users/,Not supported,Chat.UpdatePolicyViolation.All for a chat message.</br>ChannelMessage.UpdatePolicyViolation.All for a channel message,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessage-update?view=graph-rest-beta
 DELETE,appCatalogs/teamsApps/{appId}/appDefinitions/{appDefinitionId},AppCatalog.Submit  AppCatalog.ReadWrite.All  Directory.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/teamsapp-delete?view=graph-rest-beta
@@ -244,8 +259,8 @@ POST  ,https://bot.contoso.com/api/calls,Not Supported,None,IC3,True,True,True,h
 
 Graph Framework APIs:
 98% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-49% of Teams Graph APIs are in v1.0 not just beta
-48% of Teams Graph APIs have granular permissions in v1.0
+47% of Teams Graph APIs are in v1.0 not just beta
+45% of Teams Graph APIs have granular permissions in v1.0
 
 Teamwork APIs (includes Shifts):
 81% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
@@ -253,7 +268,7 @@ Teamwork APIs (includes Shifts):
 44% of Teams Graph APIs have granular permissions in v1.0
 
 Teams Graph Ecosystem (includes Shifts and IC3):
-87% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-59% of Teams Graph APIs are in v1.0 not just beta
-46% of Teams Graph APIs have granular permissions in v1.0
+88% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
+56% of Teams Graph APIs are in v1.0 not just beta
+44% of Teams Graph APIs have granular permissions in v1.0
 

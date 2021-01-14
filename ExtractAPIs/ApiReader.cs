@@ -181,7 +181,7 @@ namespace ExtractAPIs
         }
 
         private static bool ContainsAnyWord(string line, IEnumerable<string> words)
-            => words.Any(word => line.ToLower().Contains(word));
+            => words.Any(word => line.ToLower().Contains(word.ToLower()));
 
 
         private static bool IsGranularPermission(string perm)
