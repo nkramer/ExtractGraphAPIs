@@ -1,0 +1,211 @@
+verb,resource,delegated,appPerms
+POST,/app/calls,Not Supported,"Calls.JoinGroupCallsasGuest.All, Calls.JoinGroupCalls.All, Calls.Initiate.All, Calls.InitiateGroupCalls.All"
+GET,/app/calls/{id},Not Supported.,None.
+DELETE,/app/calls/{id},Not Supported.,None.
+POST,/app/calls/{id}/answer,Not Supported,Calls.JoinGroupCalls.All or Calls.JoinGroupCallsasGuest.All
+GET,/app/calls/{id}/audioRoutingGroups,Not Supported.,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/app/calls/{id}/audioRoutingGroups,Not supported.,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+GET,/app/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+PATCH,/app/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+DELETE,/app/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/app/calls/{id}/cancelMediaProcessing,Not Supported.,None.
+POST,/app/calls/{id}/changeScreenSharingRole,Not Supported,Calls.AccessMedia.All
+POST,/app/calls/{id}/mute,Not Supported.,None.
+GET,/app/calls/{id}/participants,Not Supported,None
+GET,/app/calls/{id}/participants/{id},Not Supported,None
+DELETE,/app/calls/{id}/participants/{id},Not Supported,None
+POST,/app/calls/{id}/participants/{id}/mute,Not Supported,None
+POST,/app/calls/{id}/participants/configureMixer,Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/app/calls/{id}/participants/invite,Not supported,Calls.InitiateGroupCalls.All
+POST,/app/calls/{id}/participants/muteAll,Not Supported,None
+POST,/app/calls/{id}/playPrompt,Not Supported.,None.
+POST,/app/calls/{id}/recordResponse,Not Supported,Calls.AccessMedia.All
+POST,/app/calls/{id}/redirect,Not Supported,Calls.Initiate.All
+POST,/app/calls/{id}/reject,Not Supported,None
+POST,/app/calls/{id}/subscribeToTone,Not Supported,Calls.AccessMedia.All
+POST,/app/calls/{id}/transfer,Not Supported,Calls.Initiate.All
+POST,/app/calls/{id}/unmute,Not supported.,None.
+POST,/app/calls/{id}/updateMetadata,Not Supported,"Calls.JoinGroupCallsasGuest.All, Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/app/calls/{id}/updateRecordingStatus,Not Supported,"Calls.JoinGroupCalls.All, Calls.AccessMedia.All"
+POST,/appCatalogs/teamsApps?requiresReview:{Boolean},"AppCatalog.ReadWrite.All, Directory.ReadWrite.All",Not supported.
+GET,/appCatalogs/teamsApps,"AppCatalog.Read.All, AppCatalog.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All",Not supported.
+POST,/appCatalogs/teamsApps,"AppCatalog.ReadWrite.All, Directory.ReadWrite.All",Not supported.
+DELETE,/appCatalogs/teamsApps/{id},"AppCatalog.ReadWrite.All, Directory.ReadWrite.All",Not supported.
+POST,/appCatalogs/teamsApps/{id}/appDefinitions,"AppCatalog.ReadWrite.All, Directory.ReadWrite.All",Not supported.
+GET,/beta/teams/{id}/photo/$value,"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All",Not supported.
+GET,/beta/teams/{id}/photo/{size}/$value,"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All",Not supported.
+GET,/chats,"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/chats/{id},"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/chats/{id}/members,"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/chats/{id}/members/{id},"For **user** or **chat** resource: Chat.ReadBasic, Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMember.Read.All, ChannelMember.ReadWrite, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","For **user** or **chat** resource: Not supported.<br/><br/>For **channel** resource: Member.Read.Group*, ChannelMember.Read.All, ChannelMember.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+GET,/chats/{id}/messages,"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+POST,/chats/{id}/messages,"ChatMessage.Send, Chat.ReadWrite",Not supported.
+GET,/chats/{id}/messages/{id},"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+GET,/chats/{id}/messages/{id}/hostedContents,"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/chats/{id}/messages/{id}/hostedContents/{id},"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/chats/{id}/messages/{id}/replies,"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+GET,/communications/callRecords/getDirectRoutingCalls,Not supported.,CallRecords.Read.All
+GET,/communications/callRecords/getPstnCalls,Not supported.,CallRecords.Read.All
+POST,/communications/calls,Not Supported,"Calls.JoinGroupCallsasGuest.All, Calls.JoinGroupCalls.All, Calls.Initiate.All, Calls.InitiateGroupCalls.All"
+GET,/communications/calls/{id},Not Supported.,None.
+DELETE,/communications/calls/{id},Not Supported.,None.
+POST,/communications/calls/{id}/answer,Not Supported,Calls.JoinGroupCalls.All or Calls.JoinGroupCallsasGuest.All
+GET,/communications/calls/{id}/audioRoutingGroups,Not Supported.,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/communications/calls/{id}/audioRoutingGroups,Not supported.,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+GET,/communications/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+PATCH,/communications/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+DELETE,/communications/calls/{id}/audioRoutingGroups/{id},Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/communications/calls/{id}/cancelMediaProcessing,Not Supported.,None.
+POST,/communications/calls/{id}/changeScreenSharingRole,Not Supported,Calls.AccessMedia.All
+POST,/communications/calls/{id}/keepAlive,Not Supported,None
+POST,/communications/calls/{id}/mute,Not Supported.,None.
+GET,/communications/calls/{id}/participants,Not Supported,None
+GET,/communications/calls/{id}/participants/{id},Not Supported,None
+DELETE,/communications/calls/{id}/participants/{id},Not Supported,None
+POST,/communications/calls/{id}/participants/{id}/mute,Not Supported,None
+POST,/communications/calls/{id}/participants/configureMixer,Not Supported,"Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/communications/calls/{id}/participants/invite,Not supported,Calls.InitiateGroupCalls.All
+POST,/communications/calls/{id}/participants/muteAll,Not Supported,None
+POST,/communications/calls/{id}/playPrompt,Not Supported.,None.
+POST,/communications/calls/{id}/recordResponse,Not Supported,Calls.AccessMedia.All
+POST,/communications/calls/{id}/redirect,Not Supported,Calls.Initiate.All
+POST,/communications/calls/{id}/reject,Not Supported,None
+POST,/communications/calls/{id}/subscribeToTone,Not Supported,Calls.AccessMedia.All
+POST,/communications/calls/{id}/transfer,Not Supported,Calls.Initiate.All
+POST,/communications/calls/{id}/unmute,Not supported.,None.
+POST,/communications/calls/{id}/updateMetadata,Not Supported,"Calls.JoinGroupCallsasGuest.All, Calls.JoinGroupCalls.All, Calls.InitiateGroupCalls.All"
+POST,/communications/calls/{id}/updateRecordingStatus,Not Supported,"Calls.JoinGroupCalls.All, Calls.AccessMedia.All"
+POST,/communications/calls/57dab8b1-894c-409a-b240-bd8beae78896/participants/2765eb15-01f8-47c6-b12b-c32111a4a86f/mute,Not Supported,None
+POST,/communications/calls/logTeleconferenceDeviceQuality,Not supported.,Calls.AccessMedia.All
+POST,/communications/getPresencesByUserId,Presence.Read.All,Not Supported.
+GET,/communications/presences,"Presence.Read, Presence.Read.All",Not Supported.
+PUT,/groups/{id}/photo/$value`,"Profile photo of the signed-in **user**:<br/>User.ReadWrite, User.ReadWrite.All<br /><br />For **group** resource:<br />Group.ReadWrite.All<br /><br />For **contact** resource:<br />Contacts.ReadWrite",For **user** resource:<br/>User.ReadWrite.All<br /><br />For **group** resource:<br />Group.ReadWrite.All<br /><br />For **contact** resource:<br />Contacts.ReadWrite
+PUT,/groups/{id}/team,"Group.ReadWrite.All, Directory.ReadWrite.All","Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/me/chats,"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/me/chats/{id},"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/me/chats/{id}/messages,"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+GET,/me/chats/{id}/messages/{id},"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+GET,/me/joinedTeams,"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+GET,/me/presence,"Presence.Read, Presence.Read.All",Not Supported.
+GET,/reports/getTeamsDeviceUsageDistributionUserCounts,Reports.Read.All,Reports.Read.All
+GET,/reports/getTeamsDeviceUsageUserCounts,Reports.Read.All,Reports.Read.All
+GET,/reports/getTeamsDeviceUsageUserDetail,Reports.Read.All,Reports.Read.All
+GET,/reports/getTeamsUserActivityCounts,Reports.Read.All,Reports.Read.All
+GET,/reports/getTeamsUserActivityUserCounts,Reports.Read.All,Reports.Read.All
+GET,/reports/getTeamsUserActivityUserDetail,Reports.Read.All,Reports.Read.All
+POST,/teams,"Team.Create, Group.ReadWrite.All, Directory.ReadWrite.All","Team.Create, Teamwork.Migrate.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id},"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","TeamSettings.Read.Group*, Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, TeamSettings.Edit.Group*, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+PATCH,/teams/{id},"TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamSettings.Edit.Group*, TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+POST,/teams/{id}/archive,"TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamSettings.Edit.Group*, TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/channels,"Channel.ReadBasic.All, ChannelSettings.Read.All, ChannelSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","Channel.ReadBasic.All, ChannelSettings.Read.All, ChannelSettings.ReadWrite.All, ChannelSettings.Read.Group* , ChannelSettings.Edit.Group* , Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+POST,/teams/{id}/channels,"Channel.Create, Group.ReadWrite.All, Directory.ReadWrite.All","Channel.Create.Group*, Channel.Create, Group.ReadWrite.All, Directory.ReadWrite.All, Teamwork.Migrate.All"
+GET,/teams/{id}/channels/{channelId}/filesFolder,"Files.Read, Files.ReadWrite, Files.Read.All, Files.ReadWrite.All </br>Group.Read.All, Group.ReadWrite.All </br>Sites.Read.All, Sites.ReadWrite.All","Files.Read.All, Files.ReadWrite.All </br>Group.Read.All, Group.ReadWrite.All </br>Sites.Read.All, Sites.ReadWrite.All"
+GET,/teams/{id}/channels/{id},"Channel.ReadBasic.All, ChannelSettings.Read.All, ChannelSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","Channel.ReadBasic.All, ChannelSettings.Read.All, ChannelSettings.ReadWrite.All, ChannelSettings.Read.Group*, ChannelSettings.Edit.Group*, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+PATCH,/teams/{id}/channels/{id},"ChannelSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","ChannelSettings.Edit.Group*, ChannelSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+DELETE,/teams/{id}/channels/{id},"Channel.Delete.All, Group.ReadWrite.All, Directory.ReadWrite.All","Channel.Delete.All, Channel.Delete.Group*, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/filesFolder,"Files.Read.All, Group.Read.All, Files.ReadWrite.All, Group.ReadWrite.All","Files.Read.All, Group.Read.All, Files.ReadWrite.All, Group.ReadWrite.All"
+POST,/teams/{id}/channels/{id}/members,"ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/members/{id},"For **user** or **chat** resource: Chat.ReadBasic, Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMember.Read.All, ChannelMember.ReadWrite, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","For **user** or **chat** resource: Not supported.<br/><br/>For **channel** resource: Member.Read.Group*, ChannelMember.Read.All, ChannelMember.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+PATCH,/teams/{id}/channels/{id}/members/{id},"In teams: TeamMember.ReadWrite.All<br/>In channels: ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","In teams: TeamMember.ReadWrite.All<br/>In channels:  ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+DELETE,/teams/{id}/channels/{id}/members/{id},"ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/messages,"ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All","ChannelMessage.Read.Group* , ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+POST,/teams/{id}/channels/{id}/messages,"ChannelMessage.Send, Group.ReadWrite.All",Not supported.
+GET,/teams/{id}/channels/{id}/messages/{id},"ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All","ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/messages/{id}/hostedContents,"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/messages/{id}/hostedContents/{id},"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/messages/{id}/replies,"ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All","ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+POST,/teams/{id}/channels/{id}/messages/{id}/replies,"ChannelMessage.Send, Group.ReadWrite.All",Not supported.
+GET,/teams/{id}/channels/{id}/messages/{id}/replies/{id},"ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All","ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/messages/delta,"ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All","ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/tabs,"TeamsTab.Read.All, TeamsTab.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","TeamsTab.Read.Group*, TeamsTab.Edit.Group*, TeamsTab.Read.All, TeamsTab.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+POST,/teams/{id}/channels/{id}/tabs,"TeamsTab.Create, TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsTab.Create.Group*, TeamsTab.Create, TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/channels/{id}/tabs/{id},"TeamsTab.Read.All, TeamsTab.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","TeamsTab.Read.Group*, TeamsTab.Edit.Group*, TeamsTab.Read.All, TeamsTab.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+PATCH,/teams/{id}/channels/{id}/tabs/{id},"TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsTab.Edit.Group*, TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+DELETE,/teams/{id}/channels/{id}/tabs/{id},"TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsTab.Delete.Group*, TeamsTab.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+POST,/teams/{id}/clone,"Group.ReadWrite.All, Directory.ReadWrite.All","Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/installedApps,"TeamsAppInstallation.ReadForTeam, TeamsAppInstallation.ReadWriteForTeam, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","TeamsAppInstallation.ReadForTeam.All, TeamsAppInstallation.ReadWriteForTeam.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+POST,/teams/{id}/installedApps,"TeamsAppInstallation.ReadWriteForTeam, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsAppInstallation.ReadWriteForTeam.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+DELETE,/teams/{id}/installedApps/{id},"TeamsAppInstallation.ReadWriteForTeam, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsAppInstallation.ReadWriteForTeam.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+POST,/teams/{id}/installedApps/{id}/upgrade,"TeamsAppInstallation.ReadWriteForTeam, Group.ReadWrite.All, Directory.ReadWrite.All","TeamsAppInstallation.ReadWriteForTeam.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+PATCH,/teams/{id}/members/{id},"In teams: TeamMember.ReadWrite.All<br/>In channels: ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","In teams: TeamMember.ReadWrite.All<br/>In channels:  ChannelMember.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+GET,/teams/{id}/photo,"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All",Not supported.
+GET,/teams/{id}/photo/{size},"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All",Not supported.
+GET,/teams/{id}/primaryChannel,"Group.Read.All, Group.ReadWrite.All","Group.Read.All, Group.ReadWrite.All"
+GET,/teams/{id}/schedule,"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+PUT,/teams/{id}/schedule,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+GET,/teams/{id}/schedule/offerShiftRequests,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+POST,/teams/{id}/schedule/offerShiftRequests,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+GET,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId},"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+POST,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId}/approve,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+POST,/teams/{id}/schedule/offerShiftRequests/{offerShiftRequestId}/decline,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+GET,/teams/{id}/schedule/openShifts,"Group.Read.All, Group.ReadWrite.All",Not supported.
+POST,/teams/{id}/schedule/openShifts,"Group.Read.All, Group.ReadWrite.All",Not supported.
+GET,/teams/{id}/schedule/openShifts/{openShiftId},"Group.Read.All, Group.ReadWrite.All",Not supported.
+PUT,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported.
+DELETE,/teams/{id}/schedule/openShifts/{openShiftId},Group.ReadWrite.All,Not supported.
+GET,/teams/{id}/schedule/openShiftsChangeRequests,"Group.ReadWrite.All, Group.Read.All",Not supported.
+POST,/teams/{id}/schedule/openShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*
+POST,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftChangeRequestId}/approve,Group.ReadWrite.All,Not supported.
+POST,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftChangeRequestId}/decline,Group.ReadWrite.All,Not supported.
+GET,/teams/{id}/schedule/openShiftsChangeRequests/{openShiftsChangeRequestId},"Group.ReadWrite.All, Group.Read.All",Not supported.
+GET,/teams/{id}/schedule/schedulingGroups,"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+POST,/teams/{id}/schedule/schedulingGroups,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+GET,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+PUT,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+DELETE,/teams/{id}/schedule/schedulingGroups/{schedulingGroupId},"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+POST,/teams/{id}/schedule/share,"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+GET,/teams/{id}/schedule/shifts,"Schedule.Read.All, Group.Read.All,Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+POST,/teams/{id}/schedule/shifts,Group.ReadWrite.All,Schedule.ReadWrite.All*
+GET,/teams/{id}/schedule/shifts/{shiftId},"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+PUT,/teams/{id}/schedule/shifts/{shiftId},"Schedule.ReadWrite.All, Group.ReadWrite.All",Schedule.ReadWrite.All
+DELETE,/teams/{id}/schedule/shifts/{shiftId},"Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All, Schedule.ReadWrite.All"
+GET,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,"Schedule.Read.All*, Schedule.ReadWrite.All*"
+POST,/teams/{id}/schedule/swapShiftsChangeRequests,Group.ReadWrite.All,Schedule.ReadWrite.All*
+POST,/teams/{id}/schedule/swapShiftsChangeRequests/{swapShiftChangeRequestId}/approve,Group.ReadWrite.All,Not supported.
+POST,/teams/{id}/schedule/swapShiftsChangeRequests/{swapShiftChangeRequestId}/decline,Group.ReadWrite.All,Not supported.
+GET,/teams/{id}/schedule/timeOffReasons,"Group.Read.All, Group.ReadWrite.All","Schedule.Read.All*, Schedule.ReadWrite.All*"
+POST,/teams/{id}/schedule/timeOffReasons,Group.ReadWrite.All,Schedule.ReadWrite.All*
+GET,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},"Group.Read.All, Group.ReadWrite.All","Schedule.Read.All*, Schedule.ReadWrite.All*"
+PUT,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*
+DELETE,/teams/{id}/schedule/timeOffReasons/{timeOffReasonId},Group.ReadWrite.All,Schedule.ReadWrite.All*
+GET,/teams/{id}/schedule/timeOffRequests,"Schedule.Read.All, Group.Read.All, Schedule.ReadWrite.All, Group.ReadWrite.All","Schedule.Read.All*, Schedule.ReadWrite.All*"
+GET,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId},"Group.Read.All, Group.ReadWrite.All","Schedule.Read.All*, Schedule.ReadWrite.All*"
+DELETE,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId},Group.ReadWrite.All,Schedule.ReadWrite.All*
+POST,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId}/approve,Group.ReadWrite.All,Schedule.ReadWrite.All*
+POST,/teams/{id}/schedule/timeOffRequests/{timeOffRequestId}/decline,Group.ReadWrite.All,Schedule.ReadWrite.All*
+GET,/teams/{id}/schedule/timesOff,"Group.Read.All, Group.ReadWrite.All",Not supported.
+POST,/teams/{id}/schedule/timesOff,Group.ReadWrite.All,Schedule.ReadWrite.All*
+GET,/teams/{id}/schedule/timesOff/{timeOffId},"Group.Read.All, Group.ReadWrite.All","Schedule.Read.All*, Schedule.ReadWrite.All*"
+PUT,/teams/{id}/schedule/timesOff/{timeOffId},"Group.Read.All, Group.ReadWrite.All",Schedule.ReadWrite.All*
+DELETE,/teams/{id}/schedule/timesOff/{timeOffId},Group.ReadWrite.All,Schedule.ReadWrite.All*
+POST,/teams/{id}/unarchive,"TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All","TeamSettings.Edit.Group*, TeamSettings.ReadWrite.All, Group.ReadWrite.All, Directory.ReadWrite.All"
+DELETE,/teams/{team-id}/channels/{channel-id}/members/{membership-id},TeamMember.ReadWrite.All,TeamMember.ReadWrite.All
+DELETE,/teams/{team-id}/members/{membership-id},TeamMember.ReadWrite.All,TeamMember.ReadWrite.All
+GET,/teams/{teamsId}/channels/{channelId}/members,"TeamMember.Read.All, TeamMember.ReadWrite.All","TeamMember.Read.All, TeamMember.ReadWrite.All"
+POST,/teams/{teamsId}/channels/{channelId}/members,TeamMember.ReadWrite.All,TeamMember.ReadWrite.All
+GET,/teams/{teamsId}/members,"TeamMember.Read.All, TeamMember.ReadWrite.All","TeamMember.Read.All, TeamMember.ReadWrite.All"
+POST,/teams/{teamsId}/members,TeamMember.ReadWrite.All,TeamMember.ReadWrite.All
+PATCH,/teams/,Not supported.,Chat.UpdatePolicyViolation.All for a chat message.</br>ChannelMessage.UpdatePolicyViolation.All for a channel message.
+GET,/teamwork/workforceIntegrations,"WorkforceIntegration.Read.All, WorkforceIntegration.ReadWrite.All",Not supported.
+POST,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported.
+PATCH,/teamwork/workforceIntegrations,WorkforceIntegration.ReadWrite.All,Not supported.
+GET,/teamwork/workforceIntegrations/{workforceIntegrationId},"WorkforceIntegration.Read.All, WorkforceIntegration.ReadWrite.All",Not supported.
+DELETE,/teamwork/workforceIntegrations/{workforceIntegrationId},WorkforceIntegration.ReadWrite.All,Not supported.
+GET,/users/{id}/chats,"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/users/{id}/chats/{id},"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/users/{id}/chats/{id}/members,"Chat.ReadBasic, Chat.Read, Chat.ReadWrite",Not supported.
+GET,/users/{id}/chats/{id}/members/{id},"For **user** or **chat** resource: Chat.ReadBasic, Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMember.Read.All, ChannelMember.ReadWrite, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","For **user** or **chat** resource: Not supported.<br/><br/>For **channel** resource: Member.Read.Group*, ChannelMember.Read.All, ChannelMember.ReadWrite.All, Group.Read.All, Group.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+GET,/users/{id}/chats/{id}/messages,"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+POST,/users/{id}/chats/{id}/messages,"ChatMessage.Send, Chat.ReadWrite",Not supported.
+GET,/users/{id}/chats/{id}/messages/{id},"Chat.Read, Chat.ReadWrite","Chat.Read.All, Chat.ReadWrite.All"
+GET,/users/{id}/chats/{id}/messages/{id}/hostedContents,"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/users/{id}/chats/{id}/messages/{id}/hostedContents/{id},"For **user** or **chat** resource: Chat.Read, Chat.ReadWrite<br/><br/>For **channel** resource: ChannelMessage.Read.All, Group.Read.All, Group.Read.WriteAll","For **user** or **chat** resource: Chat.Read.All, Chat.ReadWrite.All<br/><br/>For **channel** resource: ChannelMessage.Read.Group*, ChannelMessage.Read.All, Group.Read.All, Group.ReadWrite.All"
+GET,/users/{id}/joinedTeams,"Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All","Team.ReadBasic.All, TeamSettings.Read.All, TeamSettings.ReadWrite.All, User.Read.All, User.ReadWrite.All, Directory.Read.All, Directory.ReadWrite.All"
+GET,/users/{id}/presence,"Presence.Read, Presence.Read.All",Not Supported.
+GET,/users/{id}/teamwork/installedApps,"TeamsAppInstallation.ReadForUser, TeamsAppInstallation.ReadWriteForUser","TeamsAppInstallation.ReadForUser.All, TeamsAppInstallation.ReadWriteForUser.All"
+POST,/users/{id}/teamwork/installedApps,TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadWriteForUser.All
+DELETE,/users/{id}/teamwork/installedApps/{id},TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadWriteForUser.All
+POST,/users/{id}/teamwork/installedApps/{id}/upgrade,TeamsAppInstallation.ReadWriteForUser,TeamsAppInstallation.ReadWriteForUser.All
+PATCH,/users/,Not supported.,Chat.UpdatePolicyViolation.All for a chat message.</br>ChannelMessage.UpdatePolicyViolation.All for a channel message.
+DELETE,appCatalogs/teamsApps/{appId}/appDefinitions/{appDefinitionId},"AppCatalog.ReadWrite.All, Directory.ReadWrite.All",Not supported.
+POST,https://bot.contoso.com/api/calls,Not Supported,None
