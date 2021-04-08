@@ -146,7 +146,27 @@ namespace ExtractAPIs
             string url = api.Substring(index + 1, api.Length - index - 1);
             if (url.Contains("("))
                 url = url.Substring(0, url.LastIndexOf("("));
+            
+            // hack
             url = url.Replace("{teamId}", "{id}");
+            url = url.Replace("{team-id}", "{id}");
+            url = url.Replace("{channel-id}", "{id}");
+            url = url.Replace("{chat-id}", "{id}");
+            url = url.Replace("{chatId}", "{id}");
+            url = url.Replace("{app-installation-id}", "{id}");
+            url = url.Replace("{message-id}", "{id}");
+            url = url.Replace("{tab-id}", "{id}");
+            url = url.Replace("{chatThread-id}", "{id}");
+            url = url.Replace("{membership-id}", "{id}");
+            url = url.Replace("{reply-id}", "{id}");
+            url = url.Replace("{app-id}", "{id}");
+            url = url.Replace("{hosted-content-id}", "{id}");
+            url = url.Replace("{user-id}", "{id}");
+            url = url.Replace("{userId}", "{id}");
+            url = url.Replace("{meetingId}", "{id}");
+            url = url.Replace("{userId}", "{id}");
+            url = url.Replace("{userId}", "{id}");
+
             return url;
         }
 
