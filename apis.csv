@@ -91,6 +91,8 @@ GET   ,/communications/calls/{id}/participants,Not Supported,None,IC3,True,True,
 GET   ,/communications/calls/{id}/participants/{id},Not Supported,None,IC3,True,True,True,https://docs.microsoft.com/graph/api/participant-get?view=graph-rest-beta
 DELETE,/communications/calls/{id}/participants/{id},Not Supported,None,IC3,True,True,True,https://docs.microsoft.com/graph/api/participant-delete?view=graph-rest-beta
 POST  ,/communications/calls/{id}/participants/{id}/mute,Not Supported,None,IC3,True,True,True,https://docs.microsoft.com/graph/api/participant-mute?view=graph-rest-beta
+POST  ,/communications/calls/{id}/participants/{id}/startHoldMusic,Not Supported,None,IC3,False,True,False,https://docs.microsoft.com/graph/api/participant-startholdmusic?view=graph-rest-beta
+POST  ,/communications/calls/{id}/participants/{id}/stopHoldMusic,Not Supported,None,IC3,False,True,False,https://docs.microsoft.com/graph/api/participant-stopholdmusic?view=graph-rest-beta
 POST  ,/communications/calls/{id}/participants/configureMixer,Not Supported,Calls.JoinGroupCalls.All  Calls.InitiateGroupCalls.All,IC3,False,True,False,https://docs.microsoft.com/graph/api/participant-configuremixer?view=graph-rest-beta
 POST  ,/communications/calls/{id}/participants/invite,Not supported,Calls.InitiateGroupCalls.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/participant-invite?view=graph-rest-beta
 POST  ,/communications/calls/{id}/participants/muteAll,Not Supported,None,IC3,False,True,False,https://docs.microsoft.com/graph/api/participant-muteall?view=graph-rest-beta
@@ -165,8 +167,8 @@ GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id},ChannelMessage.Read.
 GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id}/hostedContents,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.Group  ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessage-list-hostedcontents?view=graph-rest-beta
 GET   ,/teams/{id}/channels/{id}/messages/{id}/replies/{id}/hostedContents/{id},ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.Group  ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessagehostedcontent-get?view=graph-rest-beta
 GET   ,/teams/{id}/channels/{id}/messages/delta,ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,ChannelMessage.Read.Group*  ChannelMessage.Read.All  Group.Read.All  Group.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessage-delta?view=graph-rest-beta
-POST  ,/teams/{id}/channels/{id}/provisionEmail,ChannelSettings.ReadWrite.All,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/channel-provisionemail?view=graph-rest-beta
-POST  ,/teams/{id}/channels/{id}/removeEmail,ChannelSettings.ReadWrite.All,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/channel-removeemail?view=graph-rest-beta
+POST  ,/teams/{id}/channels/{id}/provisionEmail,ChannelSettings.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/channel-provisionemail?view=graph-rest-beta
+POST  ,/teams/{id}/channels/{id}/removeEmail,ChannelSettings.ReadWrite.All,Not supported,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/channel-removeemail?view=graph-rest-beta
 GET   ,/teams/{id}/channels/{id}/tabs,TeamsTab.Read.All  TeamsTab.ReadWriteForTeam  TeamsTab.ReadWrite.All  Group.Read.All  Group.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,TeamsTab.Read.Group*  TeamsTab.ReadWrite.Group*  TeamsTab.Read.All  TeamsTab.ReadWriteForTeam.All  TeamsTab.ReadWrite.All  Group.Read.All  Group.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/channel-list-tabs?view=graph-rest-beta
 POST  ,/teams/{id}/channels/{id}/tabs,TeamsTab.Create  TeamsTab.ReadWriteForTeam  TeamsTab.ReadWrite.All  Group.ReadWrite.All  Directory.ReadWrite.All,TeamsTab.Create.Group*  TeamsTab.Create  TeamsTab.ReadWriteForTeam.All  TeamsTab.ReadWrite.All  Group.ReadWrite.All  Directory.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/channel-post-tabs?view=graph-rest-beta
 GET   ,/teams/{id}/channels/{id}/tabs/{id},TeamsTab.Read.All  TeamsTab.ReadWriteForTeam  TeamsTab.ReadWrite.All  Group.Read.All  Group.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,TeamsTab.Read.Group*  TeamsTab.ReadWrite.Group*  TeamsTab.Read.All  TeamsTab.ReadWriteForTeam.All  TeamsTab.ReadWrite.All  Group.Read.All  Group.ReadWrite.All  Directory.Read.All  Directory.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/channel-get-tabs?view=graph-rest-beta
@@ -299,13 +301,13 @@ POST  ,https://bot.contoso.com/api/calls,Not Supported,None,IC3,True,True,True,h
 
 Graph Framework APIs:
 98% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-75% of Teams Graph APIs are in v1.0 not just beta
-74% of Teams Graph APIs have granular permissions in v1.0
+77% of Teams Graph APIs are in v1.0 not just beta
+75% of Teams Graph APIs have granular permissions in v1.0
 
 Teamwork APIs (includes Shifts):
 84% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-78% of Teams Graph APIs are in v1.0 not just beta
-62% of Teams Graph APIs have granular permissions in v1.0
+79% of Teams Graph APIs are in v1.0 not just beta
+63% of Teams Graph APIs have granular permissions in v1.0
 
 Teams Graph Ecosystem (includes Shifts and IC3):
 89% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
