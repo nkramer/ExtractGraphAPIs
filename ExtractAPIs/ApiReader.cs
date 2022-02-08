@@ -178,7 +178,7 @@ namespace ExtractAPIs
             string perms = (permsLines.Count() == 0) ? "" : permsLines.First()[2].Trim().Replace(",", " ");
             if (perms.EndsWith("."))
                 perms = perms.Substring(0, perms.Length - 1);
-            perms = perms.Replace("**", "");
+            perms = perms.Replace("*", "");
             return perms;
         }
 
