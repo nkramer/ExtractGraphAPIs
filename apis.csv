@@ -43,7 +43,7 @@ GET   ,/appCatalogs/teamsApps/{teams-app-id}/appDefinitions/{app-definition-id}/
 GET   ,/appCatalogs/teamsApps/{teams-app-id}/appDefinitions/{app-definition-id}/outlineIcon/hostedContent/,AppCatalog.Read.All  AppCatalog.ReadWrite.All  AppCatalog.Submit,AppCatalog.Read.All  AppCatalog.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkhostedcontent-get?view=graph-rest-beta
 GET   ,/chats,Chat.ReadBasic  Chat.Read  Chat.ReadWrite,Chat.ReadBasic.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-list?view=graph-rest-beta
 POST  ,/chats,Chat.Create  Chat.ReadWrite,Chat.Create,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-post?view=graph-rest-beta
-POST  ,/chats/{chat-Id}/pinnedMessages,ChatMessage.Send  Chat.ReadWrite,Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-post-pinnedmessages?view=graph-rest-beta
+POST  ,/chats/{chat-Id}/pinnedMessages,ChatMessage.Send  Chat.ReadWrite,Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-post-pinnedmessages?view=graph-rest-beta
 POST  ,/chats/{chatsId}/hideForUser,Chat.ReadWrite,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-hideforuser?view=graph-rest-beta
 POST  ,/chats/{chatsId}/unhideForUser,Chat.ReadWrite,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-unhideforuser?view=graph-rest-beta
 GET   ,/chats/{id},Chat.ReadBasic  Chat.Read  Chat.ReadWrite,ChatSettings.Read.Chat  ChatSettings.ReadWrite.Chat  Chat.Manage.Chat  Chat.ReadBasic.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-get?view=graph-rest-beta
@@ -69,8 +69,8 @@ GET   ,/chats/{id}/messages/{id}/hostedContents/{id},ChannelMessage.Read.All  Gr
 GET   ,/chats/{id}/operations,Chat.ReadBasic  Chat.Read  Chat.ReadWrite,ChatSettings.Read.Chat  ChatSettings.ReadWrite.Chat  Chat.Manage.Chat  Chat.ReadBasic.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-list-operations?view=graph-rest-beta
 GET   ,/chats/{id}/operations/{operation-id},Chat.ReadBasic  Chat.Read  Chat.ReadWrite,ChatSettings.Read.Chat  ChatSettings.ReadWrite.Chat  Chat.Manage.Chat  Chat.ReadBasic.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamsasyncoperation-get?view=graph-rest-beta
 GET   ,/chats/{id}/permissionGrants,ResourceSpecificPermissionGrant.ReadForChat  TeamsAppInstallation.ReadForChat  TeamsAppInstallation.ReadWriteSelfForChat  TeamsAppInstallation.ReadWriteForChat,TeamsAppInstallation.Read.Chat  Chat.Manage.Chat  ResourceSpecificPermissionGrant.ReadForChat.All  TeamsAppInstallation.ReadForChat.All  TeamsAppInstallation.ReadWriteSelfForChat.All  TeamsAppInstallation.ReadWriteForChat.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-list-permissiongrants?view=graph-rest-beta
-GET   ,/chats/{id}/pinnedMessages,Chat.Read  Chat.ReadWrite,ChatMessage.Read.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-list-pinnedmessages?view=graph-rest-beta
-DELETE,/chats/{id}/pinnedMessages/{pinnedChatMessageInfoId},Chat.ReadWrite,Chat.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chat-delete-pinnedmessages?view=graph-rest-beta
+GET   ,/chats/{id}/pinnedMessages,Chat.Read  Chat.ReadWrite,ChatMessage.Read.All  Chat.Read.All  Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-list-pinnedmessages?view=graph-rest-beta
+DELETE,/chats/{id}/pinnedMessages/{pinnedChatMessageId},Chat.ReadWrite,Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-delete-pinnedmessages?view=graph-rest-beta
 POST  ,/chats/{id}/sendActivityNotification,TeamsActivity.Send,TeamsActivity.Send.Chat  TeamsActivity.Send,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-sendactivitynotification?view=graph-rest-beta
 GET   ,/chats/{id}/tabs,TeamsTab.Read.All  TeamsTab.ReadWriteSelfForChat  TeamsTab.ReadWriteForChat  TeamsTab.ReadWrite.All,TeamsTab.Read.All  TeamsTab.ReadWriteSelfForChat.All  TeamsTab.ReadWriteForChat.All  TeamsTab.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-list-tabs?view=graph-rest-beta
 POST  ,/chats/{id}/tabs,TeamsTab.Create  TeamsTab.ReadWriteSelfForChat  TeamsTab.ReadWriteForChat  TeamsTab.ReadWrite.All,TeamsTab.Create.Chat  TeamsTab.ReadWrite.Chat  TeamsTab.Create  TeamsTab.ReadWriteSelfForChat.All  TeamsTab.ReadWriteForChat.All  TeamsTab.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chat-post-tabs?view=graph-rest-beta
@@ -373,9 +373,9 @@ DELETE,/users/{id}/onlineMeetings/{onlineMeetingId}/virtualAppointment,OnlineMee
 POST  ,/users/{id}/onlineMeetings/createOrGet,OnlineMeetings.ReadWrite,OnlineMeetings.ReadWrite.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/onlinemeeting-createorget?view=graph-rest-beta
 GET   ,/users/{id}/presence,Presence.Read  Presence.Read.All,Not Supported,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-get?view=graph-rest-beta
 POST  ,/users/{id}/presence/clearPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-clearpresence?view=graph-rest-beta
-POST  ,/users/{id}/presence/clearUserPreferredPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,False,True,False,https://docs.microsoft.com/graph/api/presence-clearuserpreferredpresence?view=graph-rest-beta
+POST  ,/users/{id}/presence/clearUserPreferredPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-clearuserpreferredpresence?view=graph-rest-beta
 POST  ,/users/{id}/presence/setPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-setpresence?view=graph-rest-beta
-POST  ,/users/{id}/presence/setUserPreferredPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,False,True,False,https://docs.microsoft.com/graph/api/presence-setuserpreferredpresence?view=graph-rest-beta
+POST  ,/users/{id}/presence/setUserPreferredPresence,Presence.ReadWrite,Presence.ReadWrite.All,IC3,True,True,True,https://docs.microsoft.com/graph/api/presence-setuserpreferredpresence?view=graph-rest-beta
 GET   ,/users/{id}/teamwork/associatedTeams,Team.ReadBasic.All  TeamSettings.Read.All  TeamSettings.ReadWrite.All,Team.ReadBasic.All  TeamSettings.Read.All  TeamSettings.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/associatedteaminfo-list?view=graph-rest-beta
 GET   ,/users/{id | user-principal-name}/chats/getAllMessages?model=A,Not supported,Chat.Read.All  Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chats-getallmessages?view=graph-rest-beta
 GET   ,/users/{id | user-principal-name}/chats/getAllMessages?model=B,Not supported,Chat.Read.All  Chat.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chats-getallmessages?view=graph-rest-beta
@@ -403,16 +403,18 @@ GET   ,users({id})/onlineMeetings({id})/transcripts,OnlineMeetingTranscript.Read
 
 Graph Framework APIs:
 99% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-68% of Teams Graph APIs are in v1.0 not just beta
-67% of Teams Graph APIs have granular permissions in v1.0
+69% of Teams Graph APIs are in v1.0 not just beta
+69% of Teams Graph APIs have granular permissions in v1.0
 
 Teamwork APIs (includes Shifts):
 88% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-72% of Teams Graph APIs are in v1.0 not just beta
-59% of Teams Graph APIs have granular permissions in v1.0
+73% of Teams Graph APIs are in v1.0 not just beta
+61% of Teams Graph APIs have granular permissions in v1.0
 
 Teams Graph Ecosystem (includes Shifts and IC3):
 93% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-59% of Teams Graph APIs are in v1.0 not just beta
-52% of Teams Graph APIs have granular permissions in v1.0
+61% of Teams Graph APIs are in v1.0 not just beta
+53% of Teams Graph APIs have granular permissions in v1.0
+
+ns in v1.0
 
