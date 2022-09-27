@@ -302,15 +302,15 @@ PUT   ,/teams/{id}/schedule/timesOff/{timeOffId},Group.Read.All  Group.ReadWrite
 DELETE,/teams/{id}/schedule/timesOff/{timeOffId},Group.ReadWrite.All,Schedule.ReadWrite.All,Shifts,True,False,False,https://docs.microsoft.com/graph/api/timeoff-delete?view=graph-rest-beta
 POST  ,/teams/{id}/sendActivityNotification,TeamsActivity.Send,TeamsActivity.Send.Group  TeamsActivity.Send,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/team-sendactivitynotification?view=graph-rest-beta
 POST  ,/teams/{id}/unarchive,TeamSettings.ReadWrite.All  Group.ReadWrite.All  Directory.ReadWrite.All,TeamSettings.ReadWrite.Group  TeamSettings.ReadWrite.All  Group.ReadWrite.All  Directory.ReadWrite.All,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/team-unarchive?view=graph-rest-beta
-GET   ,/teams/{team-Id}/tags,TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-list?view=graph-rest-beta
-POST  ,/teams/{team-Id}/tags,TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-post?view=graph-rest-beta
-GET   ,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-get?view=graph-rest-beta
-PATCH ,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-update?view=graph-rest-beta
-DELETE,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-delete?view=graph-rest-beta
-GET   ,/teams/{team-Id}/tags/{teamworkTag-Id}/members,TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-list?view=graph-rest-beta
-POST  ,/teams/{team-Id}/tags/{teamworkTag-Id}/members,TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-post?view=graph-rest-beta
-GET   ,/teams/{team-Id}/tags/{teamworkTag-Id}/members/{teamworkTagMember-Id},TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-get?view=graph-rest-beta
-DELETE,/teams/{team-Id}/tags/{teamworkTag-Id}/members/{teamworkTagMember-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-delete?view=graph-rest-beta
+GET   ,/teams/{team-Id}/tags,TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-list?view=graph-rest-beta
+POST  ,/teams/{team-Id}/tags,TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-post?view=graph-rest-beta
+GET   ,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-get?view=graph-rest-beta
+PATCH ,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-update?view=graph-rest-beta
+DELETE,/teams/{team-Id}/tags/{teamworkTag-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktag-delete?view=graph-rest-beta
+GET   ,/teams/{team-Id}/tags/{teamworkTag-Id}/members,TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-list?view=graph-rest-beta
+POST  ,/teams/{team-Id}/tags/{teamworkTag-Id}/members,TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-post?view=graph-rest-beta
+GET   ,/teams/{team-Id}/tags/{teamworkTag-Id}/members/{teamworkTagMember-Id},TeamworkTag.Read  TeamworkTag.ReadWrite,TeamworkTag.Read.All  TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-get?view=graph-rest-beta
+DELETE,/teams/{team-Id}/tags/{teamworkTag-Id}/members/{teamworkTagMember-Id},TeamworkTag.ReadWrite,TeamworkTag.ReadWrite.All,Tags,False,True,False,https://docs.microsoft.com/graph/api/teamworktagmember-delete?view=graph-rest-beta
 POST  ,/teams/{teamsId}/channels/{channelId}/messages/{chatMessageId}/softDelete,ChannelMessage.ReadWrite,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chatmessage-softdelete?view=graph-rest-beta
 POST  ,/teams/{teamsId}/channels/{channelId}/messages/{chatMessageId}/undoSoftDelete,ChannelMessage.ReadWrite,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/chatmessage-undosoftdelete?view=graph-rest-beta
 PATCH ,/teams/,Chat.ReadWrite,Chat.UpdatePolicyViolation.All for a chat message.</br>ChannelMessage.UpdatePolicyViolation.All for a channel message,GraphFw,True,True,True,https://docs.microsoft.com/graph/api/chatmessage-update?view=graph-rest-beta
@@ -319,16 +319,16 @@ GET   ,/teamwork/deletedTeams,Team.ReadBasic.All,Team.ReadBasic.All,GraphFw,Fals
 GET   ,/teamwork/deletedTeams/{deletedTeamId}/channels/getAllMessages?model=A,Not supported,ChannelMessage.Read.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/deletedteam-getallmessages?view=graph-rest-beta
 GET   ,/teamwork/deletedTeams/{deletedTeamId}/channels/getAllMessages?model=B,Not supported,ChannelMessage.Read.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/deletedteam-getallmessages?view=graph-rest-beta
 GET   ,/teamwork/deletedTeams/{deletedTeamId}/channels/getAllMessages,Not supported,ChannelMessage.Read.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/deletedteam-getallmessages?view=graph-rest-beta
-GET   ,/teamwork/devices,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-list?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId},TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-get?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId}/activity,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceactivity-get?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId}/configuration,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceconfiguration-get?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId}/health,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevicehealth-get?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId}/operations,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceoperation-list?view=graph-rest-beta
-GET   ,/teamwork/devices/{teamworkDeviceId}/operations/{teamworkDeviceOperationId},TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceoperation-get?view=graph-rest-beta
-POST  ,/teamwork/devices/{teamworkDeviceId}/restart,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-restart?view=graph-rest-beta
-POST  ,/teamwork/devices/{teamworkDeviceId}/runDiagnostics,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-rundiagnostics?view=graph-rest-beta
-POST  ,/teamwork/devices/{teamworkDeviceId}/updateSoftware,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-updatesoftware?view=graph-rest-beta
+GET   ,/teamwork/devices,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-list?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId},TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-get?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId}/activity,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceactivity-get?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId}/configuration,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceconfiguration-get?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId}/health,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevicehealth-get?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId}/operations,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceoperation-list?view=graph-rest-beta
+GET   ,/teamwork/devices/{teamworkDeviceId}/operations/{teamworkDeviceOperationId},TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,TeamworkDevice.Read.All  TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdeviceoperation-get?view=graph-rest-beta
+POST  ,/teamwork/devices/{teamworkDeviceId}/restart,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-restart?view=graph-rest-beta
+POST  ,/teamwork/devices/{teamworkDeviceId}/runDiagnostics,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-rundiagnostics?view=graph-rest-beta
+POST  ,/teamwork/devices/{teamworkDeviceId}/updateSoftware,TeamworkDevice.ReadWrite.All,TeamworkDevice.ReadWrite.All,Devices,False,True,False,https://docs.microsoft.com/graph/api/teamworkdevice-updatesoftware?view=graph-rest-beta
 POST  ,/teamwork/sendActivityNotificationToRecipients,TeamsActivity.Send,TeamsActivity.Send,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamwork-sendactivitynotificationtorecipients?view=graph-rest-beta
 GET   ,/teamwork/teamsAppSettings,TeamworkAppSettings.Read.All  TeamworkAppSettings.ReadWrite.All,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamsappsettings-get?view=graph-rest-beta
 PATCH ,/teamwork/teamsAppSettings,TeamworkAppSettings.ReadWrite.All,Not supported,GraphFw,False,True,False,https://docs.microsoft.com/graph/api/teamsappsettings-update?view=graph-rest-beta
@@ -403,18 +403,20 @@ GET   ,users({id})/onlineMeetings({id})/transcripts,OnlineMeetingTranscript.Read
 
 Graph Framework APIs:
 99% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-69% of Teams Graph APIs are in v1.0 not just beta
-69% of Teams Graph APIs have granular permissions in v1.0
+77% of Teams Graph APIs are in v1.0 not just beta
+77% of Teams Graph APIs have granular permissions in v1.0
 
 Teamwork APIs (includes Shifts):
-88% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
-73% of Teams Graph APIs are in v1.0 not just beta
-61% of Teams Graph APIs have granular permissions in v1.0
+87% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
+79% of Teams Graph APIs are in v1.0 not just beta
+66% of Teams Graph APIs have granular permissions in v1.0
 
 Teams Graph Ecosystem (includes Shifts and IC3):
 93% of Teams Graph APIs have granular permissions (anything other than Group.Read/ReadWrite.All)
 61% of Teams Graph APIs are in v1.0 not just beta
 53% of Teams Graph APIs have granular permissions in v1.0
+
+lar permissions in v1.0
 
 ns in v1.0
 

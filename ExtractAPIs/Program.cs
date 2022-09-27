@@ -36,6 +36,8 @@ namespace ExtractAPIs
                 new Ownership() { Name = "IC3", KeywordsInPath = new string[] { "calls", "communications", "onlineMeetings", "presence" } },
                 new Ownership() { Name = "Reports", KeywordsInPath = new string[] { "reports" } },
                 new Ownership() { Name = "Shifts", KeywordsInPath = new string[] { "schedule", "workforceIntegrations" } },
+                new Ownership() { Name = "Tags", KeywordsInPath = new string[] { "/tags" } },
+                new Ownership() { Name = "Devices", KeywordsInPath = new string[] { "/teamwork/devices" } },
                 new Ownership() { Name = "GraphFw", KeywordsInPath = new string[] { "/" } },
             };
 
